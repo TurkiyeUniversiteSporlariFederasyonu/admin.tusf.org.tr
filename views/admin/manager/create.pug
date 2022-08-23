@@ -1,0 +1,25 @@
+extends ../../partials/admin
+block main
+  .general-title Yeni Federasyon Kullanıcısı Ekle
+  .general-bread-cramp-wrapper
+    a.general-each-bread-cramp-item(href='/admin') Ana Sayfa
+    .general-each-bread-cramp-arrow >
+    a.general-each-bread-cramp-item(href='/admin/manager') Federasyon Kullanıcıları
+    .general-each-bread-cramp-arrow >
+    .general-each-bread-cramp-item-last Yeni Federasyon Kullanıcısı Ekle
+  .general-form-outer-wrapper
+    .general-form-wrapper
+      .general-form-input-title.general-form-input-title-required E-Posta Adresi
+      input.general-text-input-small#email-input(type='email' placeholder='E-Posta Adresi')
+      .general-form-input-title.general-form-input-title-required Ad Soyad
+      input.general-text-input-small#name-input(type='text' placeholder='Ad Soyad')
+      .general-form-button-wrapper
+        a.general-form-back-button(href='/admin/manager') Vazgeç
+        .general-form-button#save-button Kaydet
+      .general-form-error#error
+    .general-form-wrapper
+      .general-form-input-title.general-form-input-title-required Kullanıcı Rolleri
+      .general-checked-input-wrapper#roles-input
+        each role in Object.keys(roles_values)
+          .general-checked-input-item(id='checked-input-' + role)= roles_values[role]
+    .general-form-error

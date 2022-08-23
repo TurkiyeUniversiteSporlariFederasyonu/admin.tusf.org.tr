@@ -1,0 +1,56 @@
+extends ./head
+block content
+  .all-wrapper
+    .all-header
+      a.all-header-logo(style='background-image: url(/res/images/logo.png)' href='/')
+      .all-header-menu-wrapper
+        .each-all-header-menu-wrapper
+          .each-all-header-menu-title-wrapper
+            svg.each-all-header-menu-title-icon(viewBox='0 0 140 84' fill='var(--white)' xmlns='http://www.w3.org/2000/svg')
+              path(d='M135.887 23.8875L80.2806 79.8875C77.1744 82.6438 73.5869 84 69.9994 84C66.4119 84 62.8331 82.6328 60.0988 79.8984L4.49251 23.8984C0.0975633 19.9062 -1.10136 13.8688 1.06601 8.6625C3.23339 3.45625 8.34251 0 13.9994 0H125.606C131.267 0 136.377 3.40419 138.547 8.64062C140.717 13.8771 139.912 19.9063 135.887 23.8875Z')
+            .each-all-header-menu-title Spor Branşları
+          .each-all-header-menu
+            if manager.roles.includes('branch_view')
+              a.each-all-header-menu-button(href='/branch') Spor Branşları
+            if manager.roles.includes('branch_create')
+              a.each-all-header-menu-button(href='/branch/create') Yeni Branş Ekle
+            if manager.roles.includes('branch_delete')
+              a.each-all-header-menu-button(href='/branch/delete') Silinmiş Branşlar
+        .each-all-header-menu-wrapper
+          .each-all-header-menu-title-wrapper
+            svg.each-all-header-menu-title-icon(viewBox='0 0 140 84' fill='var(--white)' xmlns='http://www.w3.org/2000/svg')
+              path(d='M135.887 23.8875L80.2806 79.8875C77.1744 82.6438 73.5869 84 69.9994 84C66.4119 84 62.8331 82.6328 60.0988 79.8984L4.49251 23.8984C0.0975633 19.9062 -1.10136 13.8688 1.06601 8.6625C3.23339 3.45625 8.34251 0 13.9994 0H125.606C131.267 0 136.377 3.40419 138.547 8.64062C140.717 13.8771 139.912 19.9063 135.887 23.8875Z')
+            .each-all-header-menu-title Etkinlikler
+          .each-all-header-menu
+            if manager.roles.includes('activity_view')
+              a.each-all-header-menu-button(href='/activity') Faaliyetler
+            if manager.roles.includes('activity_create')
+              a.each-all-header-menu-button(href='/activity/create') Yeni Faaliyet Yarat
+            if manager.roles.includes('activity_delete')
+              a.each-all-header-menu-button(href='/activity/delete') Silinmiş Faaliyetler
+            if manager.roles.includes('contest_view')
+              a.each-all-header-menu-button(href='/contest') Olimpiyatlar
+            if manager.roles.includes('contest_create')
+              a.each-all-header-menu-button(href='/contest/create') Yeni Olimpiyat Yarat
+            if manager.roles.includes('contest_delete')
+              a.each-all-header-menu-button(href='/contest/delete') Silinmiş Olimpiyatlar
+        .each-all-header-menu-wrapper
+          .each-all-header-menu-title-wrapper
+            svg.each-all-header-menu-title-icon(viewBox='0 0 140 84' fill='var(--white)' xmlns='http://www.w3.org/2000/svg')
+              path(d='M135.887 23.8875L80.2806 79.8875C77.1744 82.6438 73.5869 84 69.9994 84C66.4119 84 62.8331 82.6328 60.0988 79.8984L4.49251 23.8984C0.0975633 19.9062 -1.10136 13.8688 1.06601 8.6625C3.23339 3.45625 8.34251 0 13.9994 0H125.606C131.267 0 136.377 3.40419 138.547 8.64062C140.717 13.8771 139.912 19.9063 135.887 23.8875Z')
+            .each-all-header-menu-title Üniversiteler
+          .each-all-header-menu
+            if manager.roles.includes('university_view')
+              a.each-all-header-menu-button(href='/university') Üniversiteler
+            if manager.roles.includes('university_create')
+              a.each-all-header-menu-button(href='/university/create') Yeni Üniversite Yarat
+            if manager.roles.includes('user_view')
+              a.each-all-header-menu-button(href='/user') Üniversite Kullanıcıları
+            if manager.roles.includes('user_create')
+              a.each-all-header-menu-button(href='/user/create') Yeni Kullanıcı Ekle
+            if manager.roles.includes('user_delete')
+              a.each-all-header-menu-button(href='/user/delete') Silinmiş Kullanıcı Hesapları
+      .all-header-user-name= manager.name
+      a.all-header-logout-button(href='/admin/logout') Çıkış Yap
+    .all-content
+      block main

@@ -1,0 +1,29 @@
+extends ../../partials/admin
+block main
+  input.display-none#manager(value=JSON.stringify(manager))
+  .general-title Federasyon Kullanıcısını Düzenle
+  .general-bread-cramp-wrapper
+    a.general-each-bread-cramp-item(href='/admin') Ana Sayfa
+    .general-each-bread-cramp-arrow >
+    a.general-each-bread-cramp-item(href='/admin/manager') Federasyon Kullanıcıları
+    .general-each-bread-cramp-arrow >
+    .general-each-bread-cramp-item-last Federasyon Kullanıcısını Düzenle
+  .general-form-outer-wrapper
+    .general-form-wrapper
+      .general-form-input-title.general-form-input-title-required E-Posta Adresi
+      .general-text-input-small-not-allowed=manager.email
+      .general-form-input-title.general-form-input-title-required Ad Soyad
+      input.general-text-input-small#name-input(type='text' placeholder='Ad Soyad' value=manager.name)
+      .general-form-button-wrapper
+        a.general-form-back-button(href='/admin/manager') Vazgeç
+        .general-form-button#save-button Kaydet
+      .general-form-error#error
+    .general-form-wrapper
+      .general-form-input-title.general-form-input-title-required Kullanıcı Rolleri
+      .general-checked-input-wrapper#roles-input
+        each role in Object.keys(roles_values)
+          if manager.roles.includes(role)
+            .general-checked-input-item.general-checked-input-item-selected(id='checked-input-' + role)= roles_values[role]
+          else
+            .general-checked-input-item(id='checked-input-' + role)= roles_values[role]
+    .general-form-error

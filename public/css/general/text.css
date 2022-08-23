@@ -1,0 +1,10 @@
+.general-title {
+  color: var(--light-black);
+  font-weight: 700;
+  font-size: var(--title-font-size);
+  margin-bottom: var(--content-margin);
+  width: 100%;
+  padding: 0 var(--page-padding);
+  display: block;
+  text-align: left;
+}
