@@ -6,6 +6,7 @@ const sendMail = require('../../utils/sendMail');
 
 const University = require('../university/University');
 
+const formatPhoneNumber = require('./functions/formatPhoneNumber');
 const generateRandomHex = require('./functions/generateRandomHex');
 const getUser = require('./functions/getUser');
 const hashPassword = require('./functions/hashPassword');
@@ -64,6 +65,13 @@ const UserSchema = new Schema({
   password_update_last_verification_time_in_unix: {
     type: Number,
     default: null
+  },
+  phone_number: {
+    type: String,
+    default: null,
+    trim: true,
+    minlength: 1,
+    maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
   }
 });
 
@@ -121,7 +129,9 @@ UserSchema.statics.createUser = function (data, callback) {
     const newUserData = {
       university_id: university._id,
       email: data.email.trim(),
-      password: generateRandomHex(MIN_PASSWORD_LENGTH)
+      password: data.password && typeof data.password == 'string' && data.password.trim().length > MIN_PASSWORD_LENGTH ? data.password.trim() : generateRandomHex(MIN_PASSWORD_LENGTH),
+      name: data.name && typeof data.name == 'string' && data.name.trim().length ? data.name.trim() : null,
+      phone_number: formatPhoneNumber(data.phone_number)
     };
   
     const newUser = new User(newUserData);
@@ -131,8 +141,22 @@ UserSchema.statics.createUser = function (data, callback) {
         return callback('duplicated_unique_field');
       if (err)
         return callback('database_error');
-  
-      return callback(null, user._id.toString());
+
+      isUserReadyToBeComplete(user, (err, res) => {
+        if (err) return callback(err);
+
+        if (!res)
+          return callback(null, user._id.toString());
+
+        User.findByIdAndUpdate(user._id, {$set: {
+          is_completed: true
+        }}, err => {
+          if (err)
+            return callback('database_error');
+
+          return callback(null, user._id.toString());
+        });
+      });
     });
   });
 };
@@ -263,7 +287,7 @@ UserSchema.statics.findUsersByFilters = function (data, callback) {
     .find(filters)
     .skip(skip)
     .limit(limit)
-    .sort({ name: 1 })
+    .sort({ email: 1 })
     .then(users => async.timesSeries(
       users.length,
       (time, next) => User.findUserByIdAndFormat(users[time]._id, (err, user) => next(err, user)),
@@ -275,6 +299,39 @@ UserSchema.statics.findUsersByFilters = function (data, callback) {
     ))
     .catch(err =>  callback('database_error'));
 };
+
+UserSchema.statics.findUserByIdAndUpdate = function (id, data, callback) {
+  const User = this;
+
+  User.findUserById(id, (err, user) => {
+    if (err) return callback(err);
+
+    University.findUniversityById(data.university_id, (err, university) => {
+      User.findByIdAndUpdate(user._id, {$set: {
+        university_id: !err ? university._id : user.university_id,
+        name: data.name && typeof data.name == 'string' && data.name.trim().length ? data.name.trim() : user.name,
+        phone_number: formatPhoneNumber(data.phone_number) ? formatPhoneNumber(data.phone_number) : user.phone_number  
+      }}, { new :true }, (err, user) => {
+        if (err) return callback('database_error');
+
+        isUserReadyToBeComplete(user, (err, res) => {
+          if (err) return callback(err);
+
+          if (res == user.is_completed)
+            return callback(null);
+
+          User.findByIdAndUpdate(user._id, {$set: {
+            is_completed: res
+          }}, err => {
+            if (err) return callback('database_error');
+
+            return callback(null);
+          });
+        });
+      });
+    });
+  });
+}
 
 UserSchema.statics.findUserByIdAndDelete = function (id, callback) {
   const User = this;

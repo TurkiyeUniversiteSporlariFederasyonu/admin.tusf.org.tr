@@ -157,7 +157,7 @@ UniversitySchema.statics.findUniversityByIdAndUpdate = function (id, data, callb
 
     University.findByIdAndUpdate(university._id, {$set: {
       name: data.name && typeof data.name == 'string' && data.name.trim().length && data.name.length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.name.trim() : university.name,
-      name: data.short_name && typeof data.short_name == 'string' && data.short_name.trim().length && data.short_name.length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.short_name.trim() : university.short_name,
+      short_name: data.short_name && typeof data.short_name == 'string' && data.short_name.trim().length && data.short_name.length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.short_name.trim() : university.short_name,
       city: (data.city && (data.is_cyprus_university ? cyprus_city_values : city_values).includes(data.city)) ? data.city : university.city,
       is_cyprus_university: data.is_cyprus_university ? true : false
     }}, { new: true }, (err, university) => {
@@ -166,10 +166,12 @@ UniversitySchema.statics.findUniversityByIdAndUpdate = function (id, data, callb
 
       isUniversityReadyToBeComplete(university, (err, res) => {
         if (err) return callback(err);
-        if (!res) return callback(null);
+
+        if (university.is_completed == res)
+          return callback(null);
 
         University.findByIdAndUpdate(university._id, {$set: {
-          is_completed: true
+          is_completed: res
         }}, err => {
           if (err) return callback('database_error');
 

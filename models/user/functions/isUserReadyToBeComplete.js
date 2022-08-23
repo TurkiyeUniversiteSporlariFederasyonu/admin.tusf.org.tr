@@ -1,13 +1,8 @@
-const User = require('../User');
-
-module.exports = (id, callback) => {
-  User.findUserById(id, (err, user) => {
-    if (err)
-      return callback(err);
-
-    if (user.logo && user.short_name && user.city)
-      return callback(null, true);
-    
+module.exports = (user, callback) => {
+  if (!user.name || !user.name.length)
     return callback(null, false);
-  });
+  if (!user.phone_number || !user.phone_number.length)
+    return callback(null, false);
+
+  return callback(null, true);
 }

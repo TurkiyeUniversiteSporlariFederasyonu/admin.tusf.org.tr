@@ -1,33 +1,30 @@
 extends ../partials/header
 block main
-  .general-title Yeni Üniversite Kullanıcısı Ekle
+  input.display-none#user(value=JSON.stringify(user))
+  .general-title Üniversite Kullanıcısını Düzenle
   .general-bread-cramp-wrapper
     a.general-each-bread-cramp-item(href='/') Ana Sayfa
     .general-each-bread-cramp-arrow >
     a.general-each-bread-cramp-item(href='/user') Üniversite Kullanıcıları
     .general-each-bread-cramp-arrow >
-    .general-each-bread-cramp-item-last Yeni Üniversite Kullanıcısı Ekle
+    .general-each-bread-cramp-item-last Üniversite Kullanıcısını Düzenle
   .general-form-outer-wrapper
     .general-form-wrapper
       .general-form-input-title.general-form-input-title-required E-Posta Adresi
-      input.general-text-input-small#email-input(type='email' placeholder='E-Posta Adresi')
+      .general-text-input-small-not-allowed=user.email
       .general-form-input-title.general-form-input-title-required Üniversite
       .general-select-input-wrapper
-        input.general-select-input-value.display-none#university-id-input(type='text')
-        input.general-select-input-search(type='text' placeholder='Listeden Seçin')
+        input.general-select-input-value.display-none#university-id-input(type='text' value=user.university._id)
+        input.general-select-input-search(type='text' placeholder='Listeden Seçin' value=user.university.name)
         .general-select-input-options-wrapper
           each university in universities
             .general-select-input-each-option(id='select-input-' + university._id.toString())= university.name
       .general-form-button-wrapper
-        a.general-form-back-button(href='/university') Vazgeç
+        a.general-form-back-button(href='/user') Vazgeç
         .general-form-button#save-button Kaydet
       .general-form-error#error
     .general-form-wrapper
       .general-form-input-title Adı Soyadı
-      input.general-text-input-small#name-input(type='text' placeholder='Adı Soyadı')
+      input.general-text-input-small#name-input(type='text' placeholder='Adı Soyadı' value=user.name)
       .general-form-input-title Telefon Numarası
-      input.general-text-input-small#phone-input(type='text' placeholder='Telefon Numarası (0XXX XXX XX XX)')
-      .general-form-input-title Şifre
-      input.general-text-input-small#password-input(type='text' placeholder='Şifre (En az 8 karakterli olmalıdır)')
-      .general-form-input-title Şifre Tekrarı
-      input.general-text-input-small#confirm-password-input(type='text' placeholder='Şifre Tekrarı')
+      input.general-text-input-small#phone-input(type='text' placeholder='Telefon Numarası (0XXX XXX XX XX)' value=user.phone_number)
