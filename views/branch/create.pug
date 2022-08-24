@@ -1,0 +1,60 @@
+extends ../partials/header
+block main
+  .general-title Yeni Spor Branşı Ekle
+  .general-bread-cramp-wrapper
+    a.general-each-bread-cramp-item(href='/') Ana Sayfa
+    .general-each-bread-cramp-arrow >
+    a.general-each-bread-cramp-item(href='/branch') Spor Branşları
+    .general-each-bread-cramp-arrow >
+    .general-each-bread-cramp-item-last Yeni Spor Branşı Ekle
+  .general-form-outer-wrapper
+    .general-form-left-column
+      .general-form-wrapper
+        .general-form-input-title.general-form-input-title-required Branş İsmi
+        input.general-text-input-small#name-input(type='text' placeholder='Branş İsmi')
+        .general-form-input-title.general-form-input-title-required Branş Tipi
+        .general-select-input-wrapper
+          input.general-select-input-value.display-none#type-input(type='text')
+          input.general-select-input-search(type='text' placeholder='Listeden Seçin')
+          .general-select-input-options-wrapper
+            each key in Object.keys(types)
+              .general-select-input-each-option(id='select-input-' + key)= types[key]
+        .general-form-input-title.general-form-input-title-required Cinsiyet
+        .general-select-input-wrapper
+          input.general-select-input-value.display-none#gender-input(type='text')
+          input.general-select-input-search(type='text' placeholder='Listeden Seçin')
+          .general-select-input-options-wrapper
+            each key in Object.keys(genders)
+              .general-select-input-each-option(id='select-input-' + key)= genders[key]
+        .general-form-button-wrapper
+          a.general-form-back-button(href='/branch') Vazgeç
+          .general-form-button#save-button Kaydet
+        .general-form-error#error
+      .general-form-wrapper
+        .general-form-input-title Alt Branşlar
+        .general-custom-item-input-outer-wrapper
+          .general-custom-input-items-wrapper.general-drag-and-drop-wrapper#subbranches-wrapper
+          .general-custom-item-input-wrapper
+            input.general-custom-item-input(type='text' placeholder='Alt branş ekleyin')
+            svg.general-custom-input-add-button(width='512' height='512' viewBox='0 0 512 512' fill='var(--blue)' xmlns='http://www.w3.org/2000/svg')
+              path(d='M0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256ZM256 368C269.3 368 280 357.3 280 344V280H344C357.3 280 368 269.3 368 256C368 242.7 357.3 232 344 232H280V168C280 154.7 269.3 144 256 144C242.7 144 232 154.7 232 168V232H168C154.7 232 144 242.7 144 256C144 269.3 154.7 280 168 280H232V344C232 357.3 242.7 368 256 368Z')
+        .general-form-input-title Kategoriler
+        .general-custom-item-input-outer-wrapper
+          .general-custom-input-items-wrapper.general-drag-and-drop-wrapper#categories-wrapper
+          .general-custom-item-input-wrapper
+            input.general-custom-item-input(type='text' placeholder='Kategori ekleyin')
+            svg.general-custom-input-add-button(width='512' height='512' viewBox='0 0 512 512' fill='var(--blue)' xmlns='http://www.w3.org/2000/svg')
+              path(d='M0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256ZM256 368C269.3 368 280 357.3 280 344V280H344C357.3 280 368 269.3 368 256C368 242.7 357.3 232 344 232H280V168C280 154.7 269.3 144 256 144C242.7 144 232 154.7 232 168V232H168C154.7 232 144 242.7 144 256C144 269.3 154.7 280 168 280H232V344C232 357.3 242.7 368 256 368Z')
+    .general-form-right-column
+      .general-form-wrapper
+        .general-form-input-title.general-form-input-title-required Altın Madalya Sayısı
+        input.general-text-input-small#gold-medal-count-input(type='number' placeholder='Altın Madalya Sayısı' value='1')
+        .general-form-input-title.general-form-input-title-required Gümüş Madalya Sayısı
+        input.general-text-input-small#silver-medal-count-input(type='number' placeholder='Gümüş Madalya Sayısı' value='1')
+        .general-form-input-title.general-form-input-title-required Bronz Madalya Sayısı
+        input.general-text-input-small#bronze-medal-count-input(type='number' placeholder='Bronz Madalya Sayısı' value='1')
+        .general-form-input-title Minimum Takım Oyuncusu Sayısı
+        input.general-text-input-small#team-min-size-input(type='number' placeholder='Sadece takım sporları için' )
+        .general-form-input-title Maksimum Takım Oyuncusu Sayısı
+        input.general-text-input-small#team-max-size-input(type='number' placeholder='Sadece takım sporları için' )
+      

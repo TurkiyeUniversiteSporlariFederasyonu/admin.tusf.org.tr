@@ -6,5 +6,5 @@ window.addEventListener('load', () => {
 
       window.location = '/university/edit?id=' + id;
     }
-  })
-})
+  });
+});

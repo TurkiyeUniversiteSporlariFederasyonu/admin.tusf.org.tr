@@ -1,0 +1,71 @@
+extends ../partials/header
+block main
+  input.display-none#branch(value=JSON.stringify(branch))
+  .general-title Spor Branşını Düzenle
+  .general-bread-cramp-wrapper
+    a.general-each-bread-cramp-item(href='/') Ana Sayfa
+    .general-each-bread-cramp-arrow >
+    a.general-each-bread-cramp-item(href='/branch') Spor Branşları
+    .general-each-bread-cramp-arrow >
+    .general-each-bread-cramp-item-last Spor Branşını Düzenle
+  .general-form-outer-wrapper
+    .general-form-left-column
+      .general-form-wrapper
+        .general-form-input-title.general-form-input-title-required Branş İsmi
+        input.general-text-input-small#name-input(type='text' placeholder='Branş İsmi' value=branch.name)
+        .general-form-input-title.general-form-input-title-required Branş Tipi
+        .general-select-input-wrapper
+          input.general-select-input-value.display-none#type-input(type='text' value=branch.type)
+          input.general-select-input-search(type='text' placeholder='Listeden Seçin' value=types[branch.type])
+          .general-select-input-options-wrapper
+            each key in Object.keys(types)
+              .general-select-input-each-option(id='select-input-' + key)= types[key]
+        .general-form-input-title.general-form-input-title-required Cinsiyet
+        .general-select-input-wrapper
+          input.general-select-input-value.display-none#gender-input(type='text' value=branch.gender)
+          input.general-select-input-search(type='text' placeholder='Listeden Seçin' value=genders[branch.gender])
+          .general-select-input-options-wrapper
+            each key in Object.keys(genders)
+              .general-select-input-each-option(id='select-input-' + key)= genders[key]
+        .general-form-button-wrapper
+          a.general-form-back-button(href='/branch') Vazgeç
+          .general-form-button#save-button Kaydet
+        .general-form-error#error
+      .general-form-wrapper
+        .general-form-input-title Alt Branşlar
+        .general-custom-item-input-outer-wrapper
+          .general-custom-input-items-wrapper.general-drag-and-drop-wrapper#subbranches-wrapper
+            each subbranch in branch.subbranches
+              .each-general-custom-input-item-wrapper
+                .each-general-custom-input-item-text= subbranch
+                svg.each-general-custom-input-item-icon(width='320' height='321' viewBox='0 0 320 321' fill='var(--blue)' xmlns='http://www.w3.org/2000/svg')
+                  path(d='M310.6 266.4C323.1 278.9 323.1 299.15 310.6 311.65C304.4 317.9 296.2 321 288 321C279.8 321 271.62 317.875 265.38 311.625L160 206.3L54.63 311.6C48.38 317.9 40.19 321 32 321C23.81 321 15.63 317.9 9.375 311.6C-3.125 299.1 -3.125 278.85 9.375 266.35L114.775 160.95L9.375 55.6001C-3.125 43.1001 -3.125 22.8501 9.375 10.3501C21.875 -2.1499 42.125 -2.1499 54.625 10.3501L160 115.8L265.4 10.4001C277.9 -2.0999 298.15 -2.0999 310.65 10.4001C323.15 22.9001 323.15 43.1501 310.65 55.6501L205.25 161.05L310.6 266.4Z')
+          .general-custom-item-input-wrapper
+            input.general-custom-item-input(type='text' placeholder='Alt branş ekleyin')
+            svg.general-custom-input-add-button(width='512' height='512' viewBox='0 0 512 512' fill='var(--blue)' xmlns='http://www.w3.org/2000/svg')
+              path(d='M0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256ZM256 368C269.3 368 280 357.3 280 344V280H344C357.3 280 368 269.3 368 256C368 242.7 357.3 232 344 232H280V168C280 154.7 269.3 144 256 144C242.7 144 232 154.7 232 168V232H168C154.7 232 144 242.7 144 256C144 269.3 154.7 280 168 280H232V344C232 357.3 242.7 368 256 368Z')
+        .general-form-input-title Kategoriler
+        .general-custom-item-input-outer-wrapper
+          .general-custom-input-items-wrapper.general-drag-and-drop-wrapper#categories-wrapper
+            each category in branch.categories
+              .each-general-custom-input-item-wrapper
+                .each-general-custom-input-item-text= category
+                svg.each-general-custom-input-item-icon(width='320' height='321' viewBox='0 0 320 321' fill='var(--blue)' xmlns='http://www.w3.org/2000/svg')
+                  path(d='M310.6 266.4C323.1 278.9 323.1 299.15 310.6 311.65C304.4 317.9 296.2 321 288 321C279.8 321 271.62 317.875 265.38 311.625L160 206.3L54.63 311.6C48.38 317.9 40.19 321 32 321C23.81 321 15.63 317.9 9.375 311.6C-3.125 299.1 -3.125 278.85 9.375 266.35L114.775 160.95L9.375 55.6001C-3.125 43.1001 -3.125 22.8501 9.375 10.3501C21.875 -2.1499 42.125 -2.1499 54.625 10.3501L160 115.8L265.4 10.4001C277.9 -2.0999 298.15 -2.0999 310.65 10.4001C323.15 22.9001 323.15 43.1501 310.65 55.6501L205.25 161.05L310.6 266.4Z')
+          .general-custom-item-input-wrapper
+            input.general-custom-item-input(type='text' placeholder='Kategori ekleyin')
+            svg.general-custom-input-add-button(width='512' height='512' viewBox='0 0 512 512' fill='var(--blue)' xmlns='http://www.w3.org/2000/svg')
+              path(d='M0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256ZM256 368C269.3 368 280 357.3 280 344V280H344C357.3 280 368 269.3 368 256C368 242.7 357.3 232 344 232H280V168C280 154.7 269.3 144 256 144C242.7 144 232 154.7 232 168V232H168C154.7 232 144 242.7 144 256C144 269.3 154.7 280 168 280H232V344C232 357.3 242.7 368 256 368Z')
+    .general-form-right-column
+      .general-form-wrapper
+        .general-form-input-title.general-form-input-title-required Altın Madalya Sayısı
+        input.general-text-input-small#gold-medal-count-input(type='number' placeholder='Altın Madalya Sayısı' value=branch.gold_count)
+        .general-form-input-title.general-form-input-title-required Gümüş Madalya Sayısı
+        input.general-text-input-small#silver-medal-count-input(type='number' placeholder='Gümüş Madalya Sayısı' value=branch.silver_count)
+        .general-form-input-title.general-form-input-title-required Bronz Madalya Sayısı
+        input.general-text-input-small#bronze-medal-count-input(type='number' placeholder='Bronz Madalya Sayısı' value=branch.bronze_count)
+        .general-form-input-title Minimum Takım Oyuncusu Sayısı
+        input.general-text-input-small#team-min-size-input(type='number' placeholder='Sadece takım sporları için' value=branch.team_min_size)
+        .general-form-input-title Maksimum Takım Oyuncusu Sayısı
+        input.general-text-input-small#team-max-size-input(type='number' placeholder='Sadece takım sporları için' value=branch.team_max_size)
+      

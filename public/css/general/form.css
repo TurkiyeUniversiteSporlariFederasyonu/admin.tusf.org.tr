@@ -6,30 +6,29 @@
 .general-form-outer-wrapper {
   width: 100%;
   height: fit-content;
-  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0 var(--page-padding);
+  grid-gap: var(--page-padding);
+}
+
+.general-form-left-column, .general-form-right-column {
+  display: grid;
+  grid-auto-rows: min-content;
+  grid-row-gap: var(--page-padding);
 }
 
 .general-form-wrapper {
-  width: calc(max((100vw - 3 * var(--page-padding)) / 2, 400px));
-  min-width: calc(min((100vw - 3 * var(--page-padding)) / 2, 400px));
   height: fit-content;
   min-height: fit-content;
   padding: calc(var(--page-padding) / 2);
   border-radius: var(--border-radius);
   border: var(--border-width) solid var(--border-color);
   border-top: var(--very-bold-border-width) solid var(--blue);
-  margin: 0 calc(var(--page-padding) / 2);
-  margin-bottom: var(--page-padding);
   background-color: var(--white);
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
-  text-align: left;
-}
-
-.general-form-item-wrapper {
-  display: inline-flex;
-  flex-direction: column;
-  width: var(--input-width);
+  font-size: 0px;
 }
 
 .general-form-input-title {
@@ -109,4 +108,10 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
+}
+
+@media only screen and (max-width: 1050px) {
+  .general-form-outer-wrapper {
+    grid-template-columns: 1fr;
+  }
 }
