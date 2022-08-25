@@ -229,6 +229,9 @@ BranchSchema.statics.findBranchesByFilters = function (data, callback) {
 BranchSchema.statics.findBranchByIdAndUpdate = function (id, data, callback) {
   const Branch = this;
 
+  if (!data || typeof data != 'object')
+    return callback('bad_request');
+
   Branch.findBranchById(id, (err, branch) => {
     if (err) return callback(err);
 

@@ -151,6 +151,9 @@ UniversitySchema.statics.findUniversityByIdAndFormat = function (id, callback) {
 UniversitySchema.statics.findUniversityByIdAndUpdate = function (id, data, callback) {
   const University = this;
 
+  if (!data || typeof data != 'object')
+    return callback('bad_request');
+
   University.findUniversityById(id, (err, university) => {
     if (err)
       return callback(err);

@@ -303,6 +303,9 @@ UserSchema.statics.findUsersByFilters = function (data, callback) {
 UserSchema.statics.findUserByIdAndUpdate = function (id, data, callback) {
   const User = this;
 
+  if (!data || typeof data != 'object')
+    return callback('bad_request');
+
   User.findUserById(id, (err, user) => {
     if (err) return callback(err);
 

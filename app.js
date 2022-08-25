@@ -85,7 +85,7 @@ if (cluster.isMaster) {
   app.use('/admin', adminRouteController);
   app.use('/auth', authRouteController);
   app.use('/branch', branchRouteController);
-  // app.use('/contest', contestRouteController);
+  app.use('/contest', contestRouteController);
   app.use('/image', imageRouteController);
   app.use('/university', universityRouteController);
   app.use('/user', userRouteController);

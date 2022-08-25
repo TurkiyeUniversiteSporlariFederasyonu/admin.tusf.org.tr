@@ -9,7 +9,7 @@ module.exports = (user, callback) => {
 
     return callback(null, {
       _id: user._id.toString(),
-      email: user.email,
+      email: user.email.replace('_' + user._id.toString(), ''),
       name: user.name,
       phone_number: user.phone_number,
       is_deleted: user.is_deleted,
