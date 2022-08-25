@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const isAuthorized = require('../middleware/isAuthorized');
 const isLoggedIn = require('../middleware/isLoggedIn');
 
 const createGetController = require('../controllers/activity/create/get');
@@ -16,42 +17,50 @@ const restorePostController = require('../controllers/activity/restore/post');
 router.get(
   '/',
     isLoggedIn,
+    isAuthorized,
     indexGetController
 );
 router.get(
   '/create',
     isLoggedIn,
+    isAuthorized,
     createGetController
 );
 router.get(
   '/delete',
     isLoggedIn,
+    isAuthorized,
     deleteGetController
 );
 router.get(
   '/edit',
     isLoggedIn,
+    isAuthorized,
     editGetController
 );
 
 router.post(
   '/create',
     isLoggedIn,
+    isAuthorized,
     createPostController
 );
 router.post(
   '/delete',
     isLoggedIn,
+    isAuthorized,
     deletePostController
 );
 router.post(
   '/edit',
     isLoggedIn,
+    isAuthorized,
     editPostController
 );
 router.post(
   '/restore',
     isLoggedIn,
+    isAuthorized,
     restorePostController
 );
 

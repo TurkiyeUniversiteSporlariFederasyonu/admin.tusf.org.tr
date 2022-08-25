@@ -14,8 +14,6 @@ block content
               a.each-all-header-menu-button(href='/branch') Spor Branşları
             if manager.roles.includes('branch_create')
               a.each-all-header-menu-button(href='/branch/create') Yeni Branş Ekle
-            if manager.roles.includes('branch_delete')
-              a.each-all-header-menu-button(href='/branch/delete') Silinmiş Branşlar
         .each-all-header-menu-wrapper
           .each-all-header-menu-title-wrapper
             svg.each-all-header-menu-title-icon(viewBox='0 0 140 84' fill='var(--white)' xmlns='http://www.w3.org/2000/svg')
