@@ -7,7 +7,6 @@ const Activity = require('../activity/Activity');
 const formatDate = require('./functions/formatDate');
 const getContest = require('./functions/getContest');
 
-const DATE_FIELD_LENGTH = 10;
 const DUPLICATED_UNIQUE_FIELD_ERROR_CODE = 11000;
 const MAX_DATABASE_TEXT_FIELD_LENGTH = 1e4;
 const MAX_DATABASE_ARRAY_FIELD_LENGTH = 1e4;
@@ -24,14 +23,12 @@ const ContestSchema = new Schema({
     maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
   },
   start_date: {
-    type: String,
-    required: true,
-    length: DATE_FIELD_LENGTH
+    type: Date,
+    required: true
   },
   end_date: {
-    type: String,
-    required: true,
-    length: DATE_FIELD_LENGTH
+    type: Date,
+    required: true
   },
   activity_id_list: {
     type: Array,
@@ -63,10 +60,10 @@ ContestSchema.statics.createContest = function (data, callback) {
   if (!data.name || typeof data.name != 'string' || !data.name.trim().length || data.name.trim().length > MAX_DATABASE_TEXT_FIELD_LENGTH)
     return callback('bad_request');
 
-  if (!formatDate(data.start_date))
+  if (!isNaN(new Date(data.start_date.toString())))
     return callback('bad_request');
 
-  if (!formatDate(data.end_date))
+  if (!isNaN(new Date(data.end_date.toString())))
     return callback('bad_request');
 
   if (!data.activity_id_list || !Array.isArray(data.activity_id_list) || data.activity_id_list.length > MAX_DATABASE_ARRAY_FIELD_LENGTH)
@@ -84,8 +81,8 @@ ContestSchema.statics.createContest = function (data, callback) {
 
       const newContestData = {
         name: data.name,
-        start_date: formatDate(data.start_date),
-        end_date: formatDate(data.end_date),
+        start_date: new Date(data.start_date.toString()),
+        end_date: new Date(data.end_date.toString()),
         activity_id_list
       };
 
@@ -201,8 +198,8 @@ ContestSchema.statics.findContestByIdAndUpdate = function (id, data, callback) {
 
         Contest.findByIdAndUpdate(contest._id, {$set: {
           name: data.name && typeof data.name == 'string' && data.name.trim().length && data.name.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.name.trim() : contest.name,
-          start_date: formatDate(data.start_date) ? formatDate(data.start_date) : contest.start_date,
-          end_date: formatDate(data.start_date) ? formatDate(data.start_date) : contest.end_date,
+          start_date: !isNaN(new Date(data.start_date.toString())) ? new Date(data.start_date.toString()) : contest.start_date,
+          end_date: !isNaN(new Date(data.end_date.toString())) ? new Date(data.end_date.toString()) : contest.end_date,
           activity_id_list
         }}, err => {
           if (err) return callback('database_error');

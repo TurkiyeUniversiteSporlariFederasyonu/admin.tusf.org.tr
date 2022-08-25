@@ -13,7 +13,6 @@ module.exports = (activity, callback) => {
 
       return callback(null, {
         _id: activity._id.toString(),
-        name: activity.name.replace('_' + activity._id.toString(), ''),
         season: activity.season,
         type: activity.type,
         stage: activity.stage,

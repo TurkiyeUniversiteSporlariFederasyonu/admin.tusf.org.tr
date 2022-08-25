@@ -4,15 +4,12 @@ const validator = require('validator');
 const Branch = require('../branch/Branch');
 const University = require('../university/University');
 
-const formatDate = require('./functions/formatDate');
-const formatHour = require('./functions/formatHour');
 const getActivity = require('./functions/getActivity');
 
 const gender_values = ['male', 'female', 'mix'];
 const type_values = ['1. Lig', '2. Lig', 'Grup Müsabakaları', 'Klasman Ligi', 'Playoff', 'Süper Lige Yükselme', 'Süperlig', 'Şenlik', 'Turnuva', 'Türkiye Kupası', 'Türkiye Şampiyonası', 'Kış Spor Oyunları Seçme Müsabakaları'];
 const stage_value = ['1. Etap', '2. Etap', '3. Etap', '4. Etap', 'ÜNİLİG', 'ÜNİLİG Finalleri', 'Fetih Sporfest', 'GNÇ Sporfest'];
 
-const DATE_FIELD_LENGTH = 10;
 const DUPLICATED_UNIQUE_FIELD_ERROR_CODE = 11000;
 const MAX_DATABASE_TEXT_FIELD_LENGTH = 1e4;
 const MAX_DATABASE_ARRAY_FIELD_LENGTH = 1e4;
@@ -82,19 +79,17 @@ const ActivitySchema = new Schema({
     type: Number
   },
   start_date: {
-    type: String,
-    default: null,
-    length: DATE_FIELD_LENGTH
+    type: Date,
+    default: null
   },
   end_date: {
-    type: String,
-    default: null,
-    length: DATE_FIELD_LENGTH
+    type: Date,
+    default: null
   },
   last_application_date: {
     type: String,
-    default: null,
-    length: DATE_FIELD_LENGTH
+    type: Date,
+    default: null
   },
   federation_represantative: {
     type: Object,
@@ -103,13 +98,14 @@ const ActivitySchema = new Schema({
       phone_number: null
     }
   },
-  technique_meeting: {
-    type: Object,
-    default: {
-      date: null,
-      hour: null,
-      place: null
-    }
+  technique_meeting_place: {
+    type: String,
+    default: null,
+    maxlenght: MAX_DATABASE_TEXT_FIELD_LENGTH
+  },
+  technique_meeting_time: {
+    type: Date,
+    default: null
   }
 });
 
