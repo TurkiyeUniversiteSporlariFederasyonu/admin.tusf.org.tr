@@ -284,4 +284,7 @@ BranchSchema.statics.findBranchByIdAndUpdate = function (id, data, callback) {
   });
 };
 
-module.exports = mongoose.model('Branch', BranchSchema);
+if (!mongoose.models.Branch)
+  mongoose.model('Branch', BranchSchema);
+
+module.exports = mongoose.models.Branch;

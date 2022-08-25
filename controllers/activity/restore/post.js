@@ -1,13 +1,13 @@
-const Contest = require('../../../models/contest/Contest');
+const Activity = require('../../../models/activity/Activity');
 
 module.exports = (req, res) => {
-  Contest.createContest(req.body, (err, id) => {
+  Activity.findActivityByIdAndRestore(req.query.id, err => {
     if (err) {
       res.write(JSON.stringify({ error: err, success: false }));
       return res.end();
     }
 
-    res.write(JSON.stringify({ success: true, id }));
+    res.write(JSON.stringify({ success: true }));
     return res.end();
   });
 }

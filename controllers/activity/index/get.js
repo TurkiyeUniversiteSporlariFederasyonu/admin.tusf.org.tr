@@ -1,25 +1,25 @@
-const Contest = require('../../../models/contest/Contest');
+const Activity = require('../../../models/activity/Activity');
 
 module.exports = (req, res) => {
-  Contest.findContestCountFilters(req.query, (err, count) => {
+  Activity.findActivityCountFilters(req.query, (err, count) => {
     if (err) return res.redirect('/error?message=' + err);
 
-    Contest.findContestsByFilters(req.query, (err, contests) => {
+    Activity.findActivitiesByFilters(req.query, (err, activities) => {
       if (err) return res.redirect('/error?message=' + err);
 
-      return res.render('contest/index', {
-        page: 'contest/index',
-        title: 'Olimpiyatlar',
+      return res.render('activity/index', {
+        page: 'activity/index',
+        title: 'Faaliyetler',
         includes: {
           external: {
             css: ['confirm', 'bread-cramp', 'header', 'fontawesome', 'general', 'list', 'page', 'text'],
             js: ['confirm', 'ancestorWithClassName', 'header', 'page', 'serverRequest', 'throwError']
           }
         },
-        url: '/contest',
+        url: '/activity',
         manager: req.session.manager,
-        contest_count: count,
-        contests
+        activity_count: count,
+        activities
       });
     });
   });

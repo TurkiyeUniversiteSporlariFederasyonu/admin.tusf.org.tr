@@ -81,7 +81,7 @@ if (cluster.isMaster) {
     next();
   });
 
-  // app.use('/activity', activityRouteController);
+  app.use('/activity', activityRouteController);
   app.use('/admin', adminRouteController);
   app.use('/auth', authRouteController);
   app.use('/branch', branchRouteController);
