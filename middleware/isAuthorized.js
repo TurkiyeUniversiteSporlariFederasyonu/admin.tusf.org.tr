@@ -2,9 +2,14 @@ module.exports = (req, res, next) => {
   const manager = req.session.manager;
 
   const route = req.baseUrl.split('/').join('');
-  const path = req.path.split('/').join('');
+  let path = req.path.split('/').join('');
 
-  const role = route + '_' + (path && path.length ? path : 'view');
+  if (!path || !path.length)
+    path = 'view';
+  if (path == 'restore')
+    path = 'delete';
+
+  const role = route + '_' + path;
 
   if (manager.roles.includes(role))
     return next();

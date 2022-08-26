@@ -306,3 +306,30 @@
 .general-custom-input-add-button-ready:hover {
   opacity: 1 !important;
 }
+
+.general-date-input {
+  width: calc(min(var(--input-width), 100%));
+  min-width: calc(min(var(--input-width), 100%));
+  height: var(--input-height);
+  min-height: var(--input-height);
+  border: none;
+  border-bottom: var(--border-width) solid var(--border-color);
+  outline: none;
+  display: flex;
+  align-items: center;
+  padding: 0 calc(var(--small-distance));
+  color: var(--black);
+  font-weight: 500;
+  font-size: var(--small-text-font-size);
+  margin-bottom: var(--content-margin);
+  background-color: var(--white);
+}
+.general-date-input::placeholder {
+  color: var(--placeholder-color);
+}
+.general-date-input:focus {
+  border-color: var(--blue);
+}
+.general-date-input::-webkit-datetime-edit-fields-wrapper {
+  color: var(--black);
+}

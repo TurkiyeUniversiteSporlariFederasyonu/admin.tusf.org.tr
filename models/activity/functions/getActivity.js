@@ -1,3 +1,5 @@
+const moment = require('moment-timezone');
+
 const Branch = require('../../branch/Branch');
 const University = require('../../university/University');
 
@@ -25,11 +27,17 @@ module.exports = (activity, callback) => {
         is_without_age_control: activity.is_without_age_control,
         athlete_count: activity.athlete_count,
         foreign_athlete_count: activity.foreign_athlete_count,
-        start_date: activity.start_date,
-        end_date: activity.end_date,
-        last_application_date: activity.last_application_date,
-        federation_represantative: activity.federation_represantative,
-        technique_meeting: activity.technique_meeting,
+        start_date: moment(activity.start_date).format('DD[.]MM[.]YYYY'),
+        end_date: moment(activity.end_date).format('DD[.]MM[.]YYYY'),
+        last_application_date: moment(activity.last_application_date).format('DD[.]MM[.]YYYY'),
+        federation_representative: activity.federation_representative,
+        technique_meeting: {
+          time: {
+            date: activity.technique_meeting.time ? moment(activity.technique_meeting.time).locale('tr').format('DD[.]MM[.]YYYY') : null,
+            hour: activity.technique_meeting.time ? moment(activity.technique_meeting.time).locale('tr').format('kk[:]mm') : null
+          },
+          place: activity.technique_meeting.place
+        },
         branch,
         university
       });

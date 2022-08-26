@@ -15,6 +15,7 @@ const stage_values = ['1. Etap', '2. Etap', '3. Etap', '4. Etap', 'ÜNİLİG', '
 
 const DUPLICATED_UNIQUE_FIELD_ERROR_CODE = 11000;
 const MAX_DATABASE_TEXT_FIELD_LENGTH = 1e4;
+const MAX_ITEM_COUNT_PER_QUERY = 100;
 
 const Schema = mongoose.Schema;
 
@@ -100,7 +101,7 @@ const ActivitySchema = new Schema({
     type: Date,
     default: null
   },
-  federation_represantative: {
+  federation_representative: {
     type: Object,
     default: {
       name: null,
@@ -156,7 +157,7 @@ ActivitySchema.statics.createActivity = function (data, callback) {
 
       const newActivityData = {
         branch_id: branch._id,
-        season: ((new Date(data.season)).getFullYear()) + '-' + ((new Date(data.season)).getFullYear() + 1),
+        season: ((new Date(data.season)).getFullYear()) + ' - ' + ((new Date(data.season)).getFullYear() + 1),
         type: data.type,
         stage: data.stage,
         university_id: university._id,
@@ -169,11 +170,11 @@ ActivitySchema.statics.createActivity = function (data, callback) {
         foreign_athlete_count: data.foreign_athlete_count && !isNaN(parseInt(data.foreign_athlete_count)) ? parseInt(data.foreign_athlete_count) : null,
         start_date: data.start_date && !isNaN(new Date(data.start_date)) ? new Date(data.start_date) : null,
         end_date: data.end_date && !isNaN(new Date(data.end_date)) ? new Date(data.end_date) : null,
-        last_application_date: data.last_application_date && !isNaN(new Date(data.last_application_date)) ? new Date(data.last_applicationt_date) : null,
-        federation_represantative: (data.federation_represantative && typeof data.federation_represantative == 'object' ?
+        last_application_date: data.last_application_date && !isNaN(new Date(data.last_application_date)) ? new Date(data.last_application_date) : null,
+        federation_representative: (data.federation_representative && typeof data.federation_representative == 'object' ?
         {
-          name: data.federation_represantative.name && typeof data.federation_represantative.name == 'string' && data.federation_represantative.name.trim().length && data.federation_represantative.name.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.federation_represantative.name.trim() : null,
-          phone_number: formatPhoneNumber(data.federation_represantative.phone_number) ? formatPhoneNumber(data.federation_represantative.phone_number) : null
+          name: data.federation_representative.name && typeof data.federation_representative.name == 'string' && data.federation_representative.name.trim().length && data.federation_representative.name.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.federation_representative.name.trim() : null,
+          phone_number: formatPhoneNumber(data.federation_representative.phone_number) ? formatPhoneNumber(data.federation_representative.phone_number) : null
         } :
         {
           name: null,
@@ -191,9 +192,11 @@ ActivitySchema.statics.createActivity = function (data, callback) {
       }
 
       newActivityData.name = formatActivityName({
+        season: newActivityData.season,
         branch_name: branch.name,
         type: newActivityData.type,
         stage: newActivityData.stage,
+        university_name: university.name,
         gender: newActivityData.gender
       });
 
@@ -297,100 +300,74 @@ ActivitySchema.statics.findActivityByIdAndUpdate = function (id, data, callback)
   Activity.findActivityById(id, (err, activity) => {
     if (err) return callback(err);
 
-    const update = {
-      branch_id: activity.branch_id,
-      season: data.season && !isNaN((new Date(data.season))) ? (((new Date(data.season)).getFullYear()) + '-' + ((new Date(data.season)).getFullYear() + 1)) : activity.season,
-      type: data.type && type_values.includes(data.type) ? data.type : activity.type,
-      stage: data.stage && stage_values.includes(data.stage) ? data.stage : activity.stage,
-      university_id: activity.university_id,
-      gender: data.gender && gender_values.includes(data.gender) ? data.gender : activity.gender,
-      other_details: data.other_details && typeof data.other_details == 'string' && data.other_details.trim().length && data.other_details.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.other_details.trim() : null,
-      is_active: data.is_active ? true : false,
-      is_on_calendar: data.is_on_calendar ? true : false,
-      is_without_age_control: data.is_without_age_control ? true : false,
-      athlete_count: data.athlete_count && !isNaN(parseInt(data.athlete_count)) ? parseInt(data.athlete_count) : activity.athlete_count,
-      foreign_athlete_count: data.foreign_athlete_count && !isNaN(parseInt(data.foreign_athlete_count)) ? parseInt(data.foreign_athlete_count) : activity.foreign_athlete_count,
-      start_date: data.start_date && !isNaN(new Date(data.start_date)) ? new Date(data.start_date) : activity.start_date,
-      end_date: data.end_date && !isNaN(new Date(data.end_date)) ? new Date(data.end_date) : activity.end_date,
-      last_application_date: data.last_application_date && !isNaN(new Date(data.last_application_date)) ? new Date(data.last_applicationt_date) : activity.last_application_date,
-      federation_represantative: (data.federation_represantative && typeof data.federation_represantative == 'object' ?
-      {
-        name: data.federation_represantative.name && typeof data.federation_represantative.name == 'string' && data.federation_represantative.name.trim().length && data.federation_represantative.name.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.federation_represantative.name.trim() : null,
-        phone_number: formatPhoneNumber(data.federation_represantative.phone_number) ? formatPhoneNumber(data.federation_represantative.phone_number) : null
-      } :
-      {
-        name: activity.federation_represantative.name,
-        phone_number: activity.federation_represantative.phone_number
-      }),
-      technique_meeting: (data.technique_meeting && typeof data.technique_meeting == 'object' ?
-      {
-        place: data.technique_meeting.place && typeof data.technique_meeting.place == 'string' && data.technique_meeting.place.trim().length && data.technique_meeting.place.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.technique_meeting.place.trim() : null,
-        time: data.technique_meeting.time && !isNaN(new Date(data.technique_meeting.time)) ? new Date(data.technique_meeting.time) : null,
-      } :
-      {
-        place: activity.technique_meeting.place,
-        time: activity.technique_meeting.time
-      })
-    };
+    Activity.findActivityByIdAndFormat(id, (err, format_activity) => {
+      if (err) return callback(err);
 
-    Branch.findBranchById(data.branch_id, (err, branch) => {
-      if (!err) {
-        update.branch_id = branch._id;
+      const update = {
+        branch_id: activity.branch_id,
+        season: data.season && !isNaN((new Date(data.season))) ? (((new Date(data.season)).getFullYear()) + '-' + ((new Date(data.season)).getFullYear() + 1)) : activity.season,
+        type: data.type && type_values.includes(data.type) ? data.type : activity.type,
+        stage: data.stage && stage_values.includes(data.stage) ? data.stage : activity.stage,
+        university_id: activity.university_id,
+        gender: data.gender && gender_values.includes(data.gender) ? data.gender : activity.gender,
+        other_details: data.other_details && typeof data.other_details == 'string' && data.other_details.trim().length && data.other_details.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.other_details.trim() : null,
+        is_active: data.is_active ? true : false,
+        is_on_calendar: data.is_on_calendar ? true : false,
+        is_without_age_control: data.is_without_age_control ? true : false,
+        athlete_count: data.athlete_count && !isNaN(parseInt(data.athlete_count)) ? parseInt(data.athlete_count) : activity.athlete_count,
+        foreign_athlete_count: data.foreign_athlete_count && !isNaN(parseInt(data.foreign_athlete_count)) ? parseInt(data.foreign_athlete_count) : activity.foreign_athlete_count,
+        start_date: data.start_date && !isNaN(new Date(data.start_date)) ? new Date(data.start_date) : activity.start_date,
+        end_date: data.end_date && !isNaN(new Date(data.end_date)) ? new Date(data.end_date) : activity.end_date,
+        last_application_date: data.last_application_date && !isNaN(new Date(data.last_application_date)) ? new Date(data.last_application_date) : activity.last_application_date,
+        federation_representative: (data.federation_representative && typeof data.federation_representative == 'object' ?
+        {
+          name: data.federation_representative.name && typeof data.federation_representative.name == 'string' && data.federation_representative.name.trim().length && data.federation_representative.name.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.federation_representative.name.trim() : null,
+          phone_number: formatPhoneNumber(data.federation_representative.phone_number) ? formatPhoneNumber(data.federation_representative.phone_number) : null
+        } :
+        {
+          name: activity.federation_representative.name,
+          phone_number: activity.federation_representative.phone_number
+        }),
+        technique_meeting: (data.technique_meeting && typeof data.technique_meeting == 'object' ?
+        {
+          place: data.technique_meeting.place && typeof data.technique_meeting.place == 'string' && data.technique_meeting.place.trim().length && data.technique_meeting.place.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.technique_meeting.place.trim() : null,
+          time: data.technique_meeting.time && !isNaN(new Date(data.technique_meeting.time)) ? new Date(data.technique_meeting.time) : null,
+        } :
+        {
+          place: activity.technique_meeting.place,
+          time: activity.technique_meeting.time
+        })
+      };
 
-        update.name = formatActivityName({
-          branch_name: branch.name,
-          type: update.type,
-          stage: update.stage,
-          gender: update.gender
-        });
+      Branch.findBranchById(data.branch_id, (branch_err, branch) => {
+        if (!branch_err) update.branch_id = branch._id;
 
-        if (!update.name)
-          return callback('bad_request');
+        University.findUniversityById(data.university_id, (university_err, university) => {
+          if (!university_err) update.university_id = university._id;
 
-        University.findUniversityById(data.university_id, (err, university) => {
-          if (!err)
-            update.university_id = university._id;
-
+          update.name = formatActivityName({
+            season: update.season,
+            branch_name: !branch_err ? branch.name : format_activity.branch.name,
+            type: update.type,
+            stage: update.stage,
+            university_name: !university_err ? university.name : format_activity.university.name,
+            gender: update.gender
+          });
+    
+          if (!update.name)
+            return callback('bad_request');
+  
           Activity.findByIdAndUpdate(activity._id, {$set: update}, err => {
             if (err && err.code == DUPLICATED_UNIQUE_FIELD_ERROR_CODE)
               return callback('duplicated_unique_field');
             if (err)
               return callback('database_error');
-
+  
             return callback(null);
           });
         });
-      } else {
-        Branch.findBranchById(update.branch_id, (err, branch) => {
-          if (err)
-            return callback('bad_request');
-
-          update.name = formatActivityName({
-            branch_name: branch.name,
-            type: update.type,
-            stage: update.stage,
-            gender: update.gender
-          });
-
-          if (!update.name)
-            return callback('bad_request');
-
-          University.findUniversityById(data.university_id, (err, university) => {
-            if (!err)
-              update.university_id = university._id;
-
-            Activity.findByIdAndUpdate(activity._id, {$set: update}, err => {
-              if (err && err.code == DUPLICATED_UNIQUE_FIELD_ERROR_CODE)
-                return callback('duplicated_unique_field');
-              if (err)
-                return callback('database_error');
-
-              return callback(null);
-            });
-          });
-        });
-      }
-    });
+      });
+    }); 
   });
 };
 

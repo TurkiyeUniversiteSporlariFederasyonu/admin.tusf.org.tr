@@ -1,3 +1,4 @@
+const Activity = require('../../../models/activity/Activity');
 const Branch = require('../../../models/branch/branch');
 const University = require('../../../models/university/University');
 
@@ -22,6 +23,7 @@ module.exports = (req, res) => {
           },
           url: '/activity/edit',
           manager: req.session.manager,
+          activity,
           branches,
           universities,
           gender_names:  {
@@ -29,8 +31,8 @@ module.exports = (req, res) => {
             female: 'Kadın',
             mix: 'Karma'
           },
-          type_values: ['1. Lig', '2. Lig', 'Grup Müsabakaları', 'Klasman Ligi', 'Playoff', 'Süper Lige Yükselme', 'Süperlig', 'Şenlik', 'Turnuva', 'Türkiye Kupası', 'Türkiye Şampiyonası', 'Kış Spor Oyunları Seçme Müsabakaları'],
-          stage_values: ['1. Etap', '2. Etap', '3. Etap', '4. Etap', 'ÜNİLİG', 'ÜNİLİG Finalleri', 'Fetih Sporfest', 'GNÇ Sporfest']
+          types: ['1. Lig', '2. Lig', 'Grup Müsabakaları', 'Klasman Ligi', 'Playoff', 'Süper Lige Yükselme', 'Süperlig', 'Şenlik', 'Turnuva', 'Türkiye Kupası', 'Türkiye Şampiyonası', 'Kış Spor Oyunları Seçme Müsabakaları'],
+          stages: ['1. Etap', '2. Etap', '3. Etap', '4. Etap', 'ÜNİLİG', 'ÜNİLİG Finalleri', 'Fetih Sporfest', 'GNÇ Sporfest']
         });
       });
     });
