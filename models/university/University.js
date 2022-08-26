@@ -166,30 +166,38 @@ UniversitySchema.statics.findUniversityByIdAndUpdate = function (id, data, callb
     if (err)
       return callback(err);
 
-    University.findByIdAndUpdate(university._id, {$set: {
-      name: data.name && typeof data.name == 'string' && data.name.trim().length && data.name.length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.name.trim() : university.name,
-      short_name: data.short_name && typeof data.short_name == 'string' && data.short_name.trim().length && data.short_name.length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.short_name.trim() : university.short_name,
-      city: (data.city && (data.is_cyprus_university ? cyprus_city_values : city_values).includes(data.city)) ? data.city : university.city,
-      rector: data.rector && typeof data.rector && data.rector.trim().length ? data.rector : university.rector,
-      is_cyprus_university: data.is_cyprus_university ? true : false
-    }}, { new: true }, (err, university) => {
+    Image.findImageByUrl(data.logo, (err, image) => {
       if (err)
-        return callback('database_error');
+        data.logo = null;
+      else
+        data.logo = image.url;
 
-      isUniversityReadyToBeComplete(university, (err, res) => {
-        if (err) return callback(err);
-
-        if (university.is_completed == res)
-          return callback(null);
-
-        University.findByIdAndUpdate(university._id, {$set: {
-          is_completed: res
-        }}, err => {
-          if (err) return callback('database_error');
-
-          return callback(null); 
-        });
-      });     
+      University.findByIdAndUpdate(university._id, {$set: {
+        name: data.name && typeof data.name == 'string' && data.name.trim().length && data.name.length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.name.trim() : university.name,
+        short_name: data.short_name && typeof data.short_name == 'string' && data.short_name.trim().length && data.short_name.length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.short_name.trim() : university.short_name,
+        city: (data.city && (data.is_cyprus_university ? cyprus_city_values : city_values).includes(data.city)) ? data.city : university.city,
+        rector: data.rector && typeof data.rector && data.rector.trim().length ? data.rector : university.rector,
+        logo: data.logo,
+        is_cyprus_university: data.is_cyprus_university ? true : false
+      }}, { new: true }, (err, university) => {
+        if (err)
+          return callback('database_error');
+    
+        isUniversityReadyToBeComplete(university, (err, res) => {
+          if (err) return callback(err);
+    
+          if (university.is_completed == res)
+            return callback(null);
+    
+          University.findByIdAndUpdate(university._id, {$set: {
+            is_completed: res
+          }}, err => {
+            if (err) return callback('database_error');
+    
+            return callback(null); 
+          });
+        });     
+      });
     });
   });
 };

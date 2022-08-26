@@ -114,7 +114,7 @@ window.addEventListener('load', () => {
 
     if (event.target.classList.contains('general-delete-image-button')) {
       const wrapper = event.target.parentNode.parentNode;
-      const url = event.target.parentNode.childNodes[0].childNodes[0].src;
+      const url = event.target.parentNode.childNodes[0].src;
 
       serverRequest(`/image/delete?url=${url}`, 'GET', {}, res => {
         if (!res.success) return throwError(res.error);
