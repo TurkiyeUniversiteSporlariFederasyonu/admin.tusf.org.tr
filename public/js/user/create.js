@@ -8,6 +8,7 @@ window.addEventListener('load', () => {
       const universityId = document.getElementById('university-id-input').value;
       const name = document.getElementById('name-input').value;
       const phoneNumber = document.getElementById('phone-input').value;
+      const title = document.getElementById('title-input').value;
       const password = document.getElementById('password-input').value;
       const confirmPassword = document.getElementById('confirm-password-input').value;
 
@@ -28,6 +29,7 @@ window.addEventListener('load', () => {
         university_id: universityId,
         name,
         phone_number: phoneNumber,
+        title,
         password
       }, res => {
         if (!res.success && res.error == 'duplicated_unique_field')

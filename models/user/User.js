@@ -72,7 +72,14 @@ const UserSchema = new Schema({
     trim: true,
     minlength: 1,
     maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
-  }
+  },
+  title: {
+    type: String,
+    default: null,
+    trim: true,
+    minlength: 1,
+    maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
+  },
 });
 
 UserSchema.pre('save', hashPassword);
@@ -131,7 +138,8 @@ UserSchema.statics.createUser = function (data, callback) {
       email: data.email.trim(),
       password: data.password && typeof data.password == 'string' && data.password.trim().length > MIN_PASSWORD_LENGTH ? data.password.trim() : generateRandomHex(MIN_PASSWORD_LENGTH),
       name: data.name && typeof data.name == 'string' && data.name.trim().length ? data.name.trim() : null,
-      phone_number: formatPhoneNumber(data.phone_number)
+      phone_number: formatPhoneNumber(data.phone_number),
+      title: data.title && typeof data.title == 'string' && data.title.trim().length ? data.title.trim() : null
     };
   
     const newUser = new User(newUserData);
@@ -313,7 +321,8 @@ UserSchema.statics.findUserByIdAndUpdate = function (id, data, callback) {
       User.findByIdAndUpdate(user._id, {$set: {
         university_id: !err ? university._id : user.university_id,
         name: data.name && typeof data.name == 'string' && data.name.trim().length ? data.name.trim() : user.name,
-        phone_number: formatPhoneNumber(data.phone_number) ? formatPhoneNumber(data.phone_number) : user.phone_number  
+        phone_number: formatPhoneNumber(data.phone_number) ? formatPhoneNumber(data.phone_number) : user.phone_number,
+        title: data.title && typeof data.title == 'string' && data.title.trim().length ? data.title.trim() : user.title,
       }}, { new :true }, (err, user) => {
         if (err) return callback('database_error');
 

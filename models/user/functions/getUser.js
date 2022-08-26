@@ -12,6 +12,7 @@ module.exports = (user, callback) => {
       email: user.email.replace('_' + user._id.toString(), ''),
       name: user.name,
       phone_number: user.phone_number,
+      title: user.title,
       is_deleted: user.is_deleted,
       is_completed: user.is_completed,
       university

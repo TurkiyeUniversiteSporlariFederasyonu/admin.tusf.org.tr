@@ -11,6 +11,7 @@ window.addEventListener('load', () => {
       const universityId = document.getElementById('university-id-input').value;
       const name = document.getElementById('name-input').value;
       const phoneNumber = document.getElementById('phone-input').value;
+      const title = document.getElementById('title-input').value;
 
       if (!universityId || !universityId.trim().length)
         return error.innerHTML = 'Lütfen bir üniversite seçin.';
@@ -18,7 +19,8 @@ window.addEventListener('load', () => {
       serverRequest('/user/edit?id=' + user._id, 'POST', {
         university_id: universityId,
         name,
-        phone_number: phoneNumber
+        phone_number: phoneNumber,
+        title
       }, res => {
         if (!res.success && res.error == 'duplicated_unique_field')
           return error.innerHTML = 'Bu e-posta adresi ile bir kullanıcı zaten kaydedilmiş.';

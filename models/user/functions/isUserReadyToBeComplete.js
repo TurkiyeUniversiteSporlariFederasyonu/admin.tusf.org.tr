@@ -3,6 +3,8 @@ module.exports = (user, callback) => {
     return callback(null, false);
   if (!user.phone_number || !user.phone_number.length)
     return callback(null, false);
+  if (!user.title || !user.title.length)
+    return callback(null, false);
 
   return callback(null, true);
 }
