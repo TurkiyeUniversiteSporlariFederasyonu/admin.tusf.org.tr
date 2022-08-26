@@ -40,6 +40,7 @@ window.addEventListener('load', () => {
       const name = document.getElementById('name-input').value;
       const shortName = document.getElementById('short-name-input').value;
       const city = document.getElementById('city-input').value;
+      const rector = document.getElementById('rector-input').value;
 
       if (!name || !name.trim().length)
         return error.innerHTML = 'Lütfen üniversitenin adını girin.';
@@ -51,6 +52,7 @@ window.addEventListener('load', () => {
         is_cyprus_university: isCyprusUniversity,
         short_name: shortName,
         city,
+        rector
       }, res => {
         if (!res.success && res.error == 'duplicated_unique_field')
           return error.innerHTML = 'Bu isimde bir üniversite zaten kaydedilmiş.';

@@ -26,6 +26,8 @@ block main
     .general-form-wrapper
       .general-form-input-title Üniversitenin Kısa Adı
       input.general-text-input-small#short-name-input(type='text' placeholder='Üniversitenin Kısa Adı' value=university.short_name)
+      .general-form-input-title Üniversitenin Rektörü
+      input.general-text-input-small#rector-input(type='text' placeholder='Üniversitenin Rektörü' value=university.rector)
       .general-form-input-title Üniversite Logosu
       .general-image-input-outer-wrapper#logo-input-wrapper
         if university.logo

@@ -9,6 +9,7 @@ module.exports = (university, callback) => {
     is_completed: university.is_completed,
     logo: university.logo,
     short_name: university.short_name,
-    city: university.city
+    city: university.city,
+    rector: university.rector
   });
 }

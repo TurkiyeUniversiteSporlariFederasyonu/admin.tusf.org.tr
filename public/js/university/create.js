@@ -39,6 +39,7 @@ window.addEventListener('load', () => {
       const shortName = document.getElementById('short-name-input').value;
       const logo = document.getElementById('logo-input-wrapper').querySelector('img') ? document.getElementById('logo-input-wrapper').querySelector('img').src : null;
       const city = document.getElementById('city-input').value;
+      const rector = document.getElementById('rector-input').value;
 
       if (!name || !name.trim().length)
         return error.innerHTML = 'Lütfen üniversitenin adını girin.';
@@ -51,6 +52,7 @@ window.addEventListener('load', () => {
         short_name: shortName,
         logo,
         city,
+        rector
       }, res => {
         if (!res.success && res.error == 'duplicated_unique_field')
           return error.innerHTML = 'Bu isimde bir üniversite zaten kaydedilmiş.';

@@ -53,7 +53,14 @@ const UniversitySchema = new Schema({
     trim: true,
     minlength: 1,
     maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
-  }
+  },
+  rector: {
+    type: String,
+    default: null,
+    trim: true,
+    minlength: 1,
+    maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
+  },
 });
 
 UniversitySchema.statics.findUniversityById = function (id, callback) {
@@ -84,6 +91,7 @@ UniversitySchema.statics.createUniversity = function (data, callback) {
     short_name: data.short_name && typeof data.short_name && data.short_name.trim().length ? data.short_name : null,
     city: (data.city && (data.is_cyprus_university ? cyprus_city_values : city_values).includes(data.city)) ? data.city : null,
     is_cyprus_university: data.is_cyprus_university ? true : false,
+    rector: data.rector && typeof data.rector && data.rector.trim().length ? data.rector : null,
     is_completed: false
   };
 
@@ -162,6 +170,7 @@ UniversitySchema.statics.findUniversityByIdAndUpdate = function (id, data, callb
       name: data.name && typeof data.name == 'string' && data.name.trim().length && data.name.length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.name.trim() : university.name,
       short_name: data.short_name && typeof data.short_name == 'string' && data.short_name.trim().length && data.short_name.length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.short_name.trim() : university.short_name,
       city: (data.city && (data.is_cyprus_university ? cyprus_city_values : city_values).includes(data.city)) ? data.city : university.city,
+      rector: data.rector && typeof data.rector && data.rector.trim().length ? data.rector : university.rector,
       is_cyprus_university: data.is_cyprus_university ? true : false
     }}, { new: true }, (err, university) => {
       if (err)
