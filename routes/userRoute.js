@@ -8,10 +8,12 @@ const createGetController = require('../controllers/user/create/get');
 const deleteGetController = require('../controllers/user/delete/get');
 const editGetController = require('../controllers/user/edit/get');
 const indexGetController = require('../controllers/user/index/get');
+const passwordGetController = require('../controllers/user/password/get');
 
 const createPostController = require('../controllers/user/create/post');
 const deletePostController = require('../controllers/user/delete/post');
 const editPostController = require('../controllers/user/edit/post');
+const passwordPostController = require('../controllers/user/password/post');
 const restorePostController = require('../controllers/user/restore/post');
 
 router.get(
@@ -38,6 +40,12 @@ router.get(
     isAuthorized,
     editGetController
 );
+router.get(
+  '/password',
+    isLoggedIn,
+    isAuthorized,
+    passwordGetController
+);
 
 router.post(
   '/create',
@@ -56,6 +64,12 @@ router.post(
     isLoggedIn,
     isAuthorized,
     editPostController
+);
+router.post(
+  '/password',
+    isLoggedIn,
+    isAuthorized,
+    passwordPostController
 );
 router.post(
   '/restore',

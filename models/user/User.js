@@ -343,7 +343,29 @@ UserSchema.statics.findUserByIdAndUpdate = function (id, data, callback) {
       });
     });
   });
-}
+};
+
+UserSchema.statics.findUserByIdAndUpdatePassword = function (id, data, callback) {
+  const User = this;
+
+  if (!data || typeof data != 'object')
+    return callback('bad_request');
+
+  if (!data.password || typeof data.password != 'string' || data.password.trim().length < MIN_PASSWORD_LENGTH)
+    return callback('bad_request');
+
+  User.findUserById(id, (err, user) => {
+    if (err) return callback(err);
+
+    user.password = data.password.trim();
+
+    user.save(err => {
+      if (err) return callback('database_error');
+
+      return callback(null);
+    });
+  });
+};
 
 UserSchema.statics.findUserByIdAndDelete = function (id, callback) {
   const User = this;

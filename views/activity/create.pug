@@ -17,13 +17,6 @@ block main
           .general-select-input-options-wrapper#branch-options-wrapper
             each branch in branches
               .general-select-input-each-option(id='select-input-' + branch._id.toString())= branch.name
-        .general-form-input-title.general-form-input-title-required Sezon
-        .general-select-input-wrapper
-          input.general-select-input-value.display-none#season-input(type='text')
-          input.general-select-input-search#season-search-input(type='text' placeholder='Listeden Seçin')
-          .general-select-input-options-wrapper#season-options-wrapper
-            - for (let i = ((new Date()).getFullYear()); i >= ((new Date()).getFullYear() - 10); i--)
-              .general-select-input-each-option(id='select-input-' + i)= i + ' - ' + (i+1)
         .general-form-input-title.general-form-input-title-required Tip
         .general-select-input-wrapper
           input.general-select-input-value.display-none#type-input(type='text')

@@ -2,14 +2,16 @@ const async = require('async');
 const mongoose = require('mongoose');
 const validator = require('validator');
 
+const getCurrentSeason = require('../../utils/getCurrentSeason');
+
 const Activity = require('../activity/Activity');
 
-const formatDate = require('./functions/formatDate');
 const getContest = require('./functions/getContest');
 
 const DUPLICATED_UNIQUE_FIELD_ERROR_CODE = 11000;
 const MAX_DATABASE_TEXT_FIELD_LENGTH = 1e4;
 const MAX_DATABASE_ARRAY_FIELD_LENGTH = 1e4;
+const MAX_ITEM_COUNT_PER_QUERY = 100;
 
 const Schema = mongoose.Schema;
 
@@ -19,6 +21,13 @@ const ContestSchema = new Schema({
     required: true,
     trim: true,
     unique: true,
+    minlength: 1,
+    maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
+  },
+  season: {
+    type: String,
+    required: true,
+    index: true,
     minlength: 1,
     maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
   },
@@ -81,6 +90,7 @@ ContestSchema.statics.createContest = function (data, callback) {
 
       const newContestData = {
         name: data.name,
+        season: getCurrentSeason(),
         start_date: new Date(data.start_date.toString()),
         end_date: new Date(data.end_date.toString()),
         activity_id_list

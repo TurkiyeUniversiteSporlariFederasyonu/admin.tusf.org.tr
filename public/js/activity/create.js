@@ -5,7 +5,6 @@ window.addEventListener('load', () => {
       error.innerHTML = '';
       
       const branchId = document.getElementById('branch-id-input').value;
-      const season = document.getElementById('season-input').value;
       const type = document.getElementById('type-input').value;
       const stage = document.getElementById('stage-input').value;
       const universityId = document.getElementById('university-id-input').value;
@@ -31,9 +30,6 @@ window.addEventListener('load', () => {
       if (!branchId || !branchId.trim().length)
         return error.innerHTML = 'Lütfen faaliyet branşını seçiniz.';
 
-      if (!season || !season.trim().length)
-        return error.innerHTML = 'Lütfen faaliyet sezonunu seçiniz.';
-
       if (!type || !type.trim().length)
         return error.innerHTML = 'Lütfen faaliyet tipini seçiniz.';
 
@@ -48,7 +44,6 @@ window.addEventListener('load', () => {
       
       serverRequest('/activity/create', 'POST', {
         branch_id: branchId,
-        season,
         type,
         stage,
         university_id: universityId,

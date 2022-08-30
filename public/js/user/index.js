@@ -27,5 +27,12 @@ window.addEventListener('load', () => {
 
       window.location = '/user/edit?id=' + id;
     }
-  })
-})
+
+    if (ancestorWithClassName(event.target, 'edit-user-password-button')) {
+      const target = ancestorWithClassName(event.target, 'edit-user-password-button');
+      const id = target.parentNode.id;
+
+      window.location = '/user/password?id=' + id;
+    }
+  });
+});

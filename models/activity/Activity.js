@@ -2,6 +2,8 @@ const async = require('async');
 const mongoose = require('mongoose');
 const validator = require('validator');
 
+const getCurrentSeason = require('../../utils/getCurrentSeason');
+
 const Branch = require('../branch/Branch');
 const University = require('../university/University');
 
@@ -34,6 +36,7 @@ const ActivitySchema = new Schema({
   season: {
     type: String,
     required: true,
+    index: true,
     minlength: 1,
     maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
   },
@@ -143,9 +146,6 @@ ActivitySchema.statics.createActivity = function (data, callback) {
     University.findUniversityById(data.university_id, (err, university) => {
       if (err) return callback(err);
 
-      if (isNaN((new Date(data.season)).getFullYear()))
-        return callback('bad_request');
-
       if (!data.type || !type_values.includes(data.type))
         return callback('bad_request');
 
@@ -157,7 +157,7 @@ ActivitySchema.statics.createActivity = function (data, callback) {
 
       const newActivityData = {
         branch_id: branch._id,
-        season: ((new Date(data.season)).getFullYear()) + ' - ' + ((new Date(data.season)).getFullYear() + 1),
+        season: getCurrentSeason(),
         type: data.type,
         stage: data.stage,
         university_id: university._id,
@@ -192,7 +192,7 @@ ActivitySchema.statics.createActivity = function (data, callback) {
       }
 
       newActivityData.name = formatActivityName({
-        season: newActivityData.season,
+        season: getCurrentSeason(),
         branch_name: branch.name,
         type: newActivityData.type,
         stage: newActivityData.stage,
@@ -305,7 +305,6 @@ ActivitySchema.statics.findActivityByIdAndUpdate = function (id, data, callback)
 
       const update = {
         branch_id: activity.branch_id,
-        season: data.season && !isNaN((new Date(data.season))) ? (((new Date(data.season)).getFullYear()) + '-' + ((new Date(data.season)).getFullYear() + 1)) : activity.season,
         type: data.type && type_values.includes(data.type) ? data.type : activity.type,
         stage: data.stage && stage_values.includes(data.stage) ? data.stage : activity.stage,
         university_id: activity.university_id,
@@ -346,7 +345,7 @@ ActivitySchema.statics.findActivityByIdAndUpdate = function (id, data, callback)
           if (!university_err) update.university_id = university._id;
 
           update.name = formatActivityName({
-            season: update.season,
+            season: getCurrentSeason(),
             branch_name: !branch_err ? branch.name : format_activity.branch.name,
             type: update.type,
             stage: update.stage,

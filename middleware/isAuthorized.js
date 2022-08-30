@@ -8,6 +8,8 @@ module.exports = (req, res, next) => {
     path = 'view';
   if (path == 'restore')
     path = 'delete';
+  if (path == 'password')
+    path = 'edit';
 
   const role = route + '_' + path;
 

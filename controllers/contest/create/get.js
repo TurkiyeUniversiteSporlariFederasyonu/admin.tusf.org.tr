@@ -10,7 +10,7 @@ module.exports = (req, res) => {
       includes: {
         external: {
           css: ['bread-cramp', 'form', 'header', 'fontawesome', 'general', 'input', 'page', 'text'],
-          js: ['ancestorWithClassName', 'dragAndDropWrapper', 'duplicateElement', 'header', 'input', 'page', 'serverRequest']
+          js: ['ancestorWithClassName', 'dragAndDrop', 'duplicateElement', 'header', 'input', 'page', 'serverRequest']
         }
       },
       url: '/contest/create',
