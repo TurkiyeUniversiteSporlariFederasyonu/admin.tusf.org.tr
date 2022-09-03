@@ -1,4 +1,4 @@
-const Branch = require('../../../models/branch/branch');
+const Branch = require('../../../models/branch/Branch');
 const University = require('../../../models/university/University');
 
 module.exports = (req, res) => {
