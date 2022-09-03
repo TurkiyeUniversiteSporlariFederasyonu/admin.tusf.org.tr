@@ -2,7 +2,7 @@ const async = require('async');
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-const sendMail = require('../../utils/sendMail');
+const sendEmail = require('../../utils/sendEmail');
 
 const University = require('../university/University');
 
@@ -206,9 +206,9 @@ UserSchema.statics.findUserByEmailAndGeneratePasswordVerificationToken = functio
       if (err)
         return callback('database_error');
 
-      sendMail({
+      sendEmail({
+        template: 'password_update_request',
         to: user.email,
-        type: 'password_update_request',
         _id: user._id.toString(),
         email: user.email,
         token: user.password_update_verification_token

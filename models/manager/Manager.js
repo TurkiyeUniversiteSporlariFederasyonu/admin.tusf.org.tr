@@ -2,7 +2,7 @@ const async = require('async');
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-const sendMail = require('../../utils/sendMail');
+const sendEmail = require('../../utils/sendEmail');
 
 const generateRandomHex = require('./functions/generateRandomHex');
 const getManager = require('./functions/getManager');
@@ -184,11 +184,12 @@ ManagerSchema.statics.findManagerByEmailAndGeneratePasswordVerificationToken = f
       if (err)
         return callback('database_error');
 
-      sendMail({
+      sendEmail({
+        template: 'manager_password_reset',
         to: manager.email,
-        type: 'password_update_request',
         _id: manager._id.toString(),
         email: manager.email,
+        name: manager.name && manager.name.length ? manager.name : manager.email.split('@')[0],
         token: manager.password_update_verification_token
       }, err => {
         if (err)
