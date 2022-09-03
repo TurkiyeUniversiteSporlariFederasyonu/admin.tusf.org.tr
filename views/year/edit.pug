@@ -1,0 +1,22 @@
+extends ../partials/header
+block main
+  input.display-none#year(value=JSON.stringify(year))
+  .general-title Sezon Ayarlarını Düzenle (#{year.season})
+  .general-bread-cramp-wrapper
+    a.general-each-bread-cramp-item(href='/') Ana Sayfa
+    .general-each-bread-cramp-arrow >
+    a.general-each-bread-cramp-item(href='/year') Sezon Ayarları
+    .general-each-bread-cramp-arrow >
+    .general-each-bread-cramp-item-last Sezon Ayarlarını Düzenle
+  .general-form-outer-wrapper
+    .general-form-wrapper
+      .general-form-input-title.general-form-input-title-required Sezon
+      .general-text-input-small-not-allowed= year.season
+      .general-form-input-title Üniversite Branş Seçimi Başlangıç Tarihi
+      input.general-date-input#participation-update-start-date-input(type='date' placeholder='Lütfen seçiniz' value=(year.participation_update_start_date ? year.participation_update_start_date.split('.').reverse().join('-') : ''))
+      .general-form-input-title Üniversite Branş Seçimi Bitiş Tarihi
+      input.general-date-input#participation-update-end-date-input(type='date' placeholder='Lütfen seçiniz' value=(year.participation_update_end_date ? year.participation_update_end_date.split('.').reverse().join('-') : ''))
+      .general-form-button-wrapper
+        a.general-form-back-button(href='/year') Vazgeç
+        .general-form-button#save-button Kaydet
+      .general-form-error#error

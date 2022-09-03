@@ -1,5 +1,7 @@
 module.exports = (req, res) => {
   const roles_values = {
+    'year_view': 'Sezon Bilgileri Görüntüleme',
+    'year_edit': 'Sezon Bilgileri Düzenleme',
     'activity_view': 'Faaliyetleri Görme',
     'activity_create': 'Faaliyet Yaratma',
     'activity_edit': 'Faaliyet Düzenleme',
@@ -20,7 +22,7 @@ module.exports = (req, res) => {
     'user_view': 'Üniversite Kullanıcılarını Görme',
     'user_create': 'Üniversite Kullanıcısı Ekleme',
     'user_edit': 'Üniversite Kullanıcısı Düzenleme',
-    'user_delete': 'Üniversite Kullanıcısı Silme',
+    'user_delete': 'Üniversite Kullanıcısı Silme'
   };
 
   return res.render('admin/manager/create', {

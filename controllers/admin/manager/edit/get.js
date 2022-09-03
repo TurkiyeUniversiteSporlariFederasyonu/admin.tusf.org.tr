@@ -2,6 +2,8 @@ const Manager = require('../../../../models/manager/Manager');
 
 module.exports = (req, res) => {
   const roles_values = {
+    'year_view': 'Sezon Bilgileri Görüntüleme',
+    'year_edit': 'Sezon Bilgileri Düzenleme',
     'activity_view': 'Faaliyetleri Görme',
     'activity_create': 'Faaliyet Yaratma',
     'activity_edit': 'Faaliyet Düzenleme',

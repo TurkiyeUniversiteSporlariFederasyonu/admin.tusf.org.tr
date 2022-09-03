@@ -22,7 +22,8 @@ const roles_values = [
   'contest_view', 'contest_create', 'contest_edit', 'contest_delete',
   'student_view', 'student_create', 'student_edit', 'student_delete',
   'university_view', 'university_create', 'university_edit', 'university_delete',
-  'user_view', 'user_create', 'user_edit', 'user_delete'
+  'user_view', 'user_create', 'user_edit', 'user_delete',
+  'year_view', 'year_edit'
 ];
 
 const Schema = mongoose.Schema;

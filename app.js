@@ -43,6 +43,7 @@ if (cluster.isMaster) {
   const indexRouteController = require('./routes/indexRoute');
   const universityRouteController = require('./routes/universityRoute');
   const userRouteController = require('./routes/userRoute');
+  const yearRouteController = require('./routes/yearRoute');
 
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'pug');
@@ -89,6 +90,7 @@ if (cluster.isMaster) {
   app.use('/image', imageRouteController);
   app.use('/university', universityRouteController);
   app.use('/user', userRouteController);
+  app.use('/year', yearRouteController);
   app.use('/', indexRouteController);
 
   server.listen(PORT, () => {
