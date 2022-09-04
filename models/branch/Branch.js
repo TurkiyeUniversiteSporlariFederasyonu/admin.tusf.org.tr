@@ -10,7 +10,7 @@ const gender_values = ['male', 'female', 'mix'];
 const DUPLICATED_UNIQUE_FIELD_ERROR_CODE = 11000;
 const MAX_DATABASE_TEXT_FIELD_LENGTH = 1e4;
 const MAX_DATABASE_ARRAY_FIELD_LENGTH = 1e4;
-const MAX_ITEM_COUNT_PER_QUERY = 100;
+const MAX_ITEM_COUNT_PER_QUERY = 1e3;
 
 const Schema = mongoose.Schema;
 

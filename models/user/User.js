@@ -14,10 +14,11 @@ const isUserReadyToBeComplete = require('./functions/isUserReadyToBeComplete');
 const verifyPassword = require('./functions/verifyPassword');
 
 const DUPLICATED_UNIQUE_FIELD_ERROR_CODE = 11000;
+const ID_NUMBER_LENGTH = 11;
 const TEN_MINS_IN_MS = 10 * 60 * 1000;
 const MAX_DATABASE_TEXT_FIELD_LENGTH = 1e4;
-const MAX_ITEM_COUNT_PER_QUERY = 100;
-const MIN_PASSWORD_LENGTH = 8;
+const MAX_ITEM_COUNT_PER_QUERY = 1e3;
+const MIN_PASSWORD_LENGTH = 1;
 const SECURE_STRING_LENGTH = 32;
 
 const Schema = mongoose.Schema;
@@ -80,6 +81,14 @@ const UserSchema = new Schema({
     minlength: 1,
     maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
   },
+  id_number: {
+    type: String,
+    unique: true,
+    trim: true,
+    sparse: true,
+    length: ID_NUMBER_LENGTH,
+    default: null
+  }
 });
 
 UserSchema.pre('save', hashPassword);
@@ -100,6 +109,8 @@ UserSchema.statics.findUserById = function (id, callback) {
 
 UserSchema.statics.findUserByEmailAndVerifyPassword = function (data, callback) {
   const User = this;
+
+  console.log(data)
 
   if (!data || !data.email || !validator.isEmail(data.email) || !data.password)
     return callback('bad_request');
@@ -139,7 +150,8 @@ UserSchema.statics.createUser = function (data, callback) {
       password: data.password && typeof data.password == 'string' && data.password.trim().length > MIN_PASSWORD_LENGTH ? data.password.trim() : generateRandomHex(MIN_PASSWORD_LENGTH),
       name: data.name && typeof data.name == 'string' && data.name.trim().length ? data.name.trim() : null,
       phone_number: formatPhoneNumber(data.phone_number),
-      title: data.title && typeof data.title == 'string' && data.title.trim().length ? data.title.trim() : null
+      title: data.title && typeof data.title == 'string' && data.title.trim().length ? data.title.trim() : null,
+      id_number: data.id_number && typeof data.id_number == 'string' && data.id_number.trim().length == ID_NUMBER_LENGTH ? data.id_number.trim() : null
     };
   
     const newUser = new User(newUserData);
