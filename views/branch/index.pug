@@ -5,13 +5,13 @@ block main
     a.general-each-bread-cramp-item(href='/') Ana Sayfa
     .general-each-bread-cramp-arrow >
     .general-each-bread-cramp-item-last Spor Branşları
-  .general-pages-wrapper
-    .general-pages-info Her sayfada #{QUERY_LIMIT} adet veri gösteriliyor.
-    .general-pages-inner-wrapper
-      .general-pages-previous-button Önceki Sayfa
-      .general-pages-inner-buttons-wrapper
-        - for (let i = 0; i < branch_count / QUERY_LIMIT; i++)
-          span= i
+  //- .general-pages-wrapper
+  //-   .general-pages-info Her sayfada #{QUERY_LIMIT} adet veri gösteriliyor.
+  //-   .general-pages-inner-wrapper
+  //-     .general-pages-previous-button Önceki Sayfa
+  //-     .general-pages-inner-buttons-wrapper
+  //-       - for (let i = 0; i < branch_count / QUERY_LIMIT; i++)
+  //-         span= i
   .general-list-wrapper
     each branch in branches
       .general-each-list-item(id=branch._id.toString())
