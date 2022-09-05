@@ -22,6 +22,13 @@ block main
     .general-form-wrapper
       .general-form-input-title Üniversitenin Kısa Adı
       input.general-text-input-small#short-name-input(type='text' placeholder='Üniversitenin Kısa Adı')
+      .general-form-input-title Üniversitenin Tipi
+      .general-select-input-wrapper
+        input.general-select-input-value.display-none#type-input(type='text')
+        input.general-select-input-search#type-search-input(type='text' placeholder='Listeden Seçin')
+        .general-select-input-options-wrapper#type-options-wrapper
+          each type_value in Object.keys(type_names)
+            .general-select-input-each-option(id='select-input-' + type_value)= type_names[type_value]
       .general-form-input-title Üniversitenin Rektörü
       input.general-text-input-small#rector-input(type='text' placeholder='Üniversitenin Rektörü')
       .general-form-input-title Üniversite Logosu

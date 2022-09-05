@@ -11,6 +11,7 @@ const DUPLICATED_UNIQUE_FIELD_ERROR_CODE = 11000;
 const MAX_DATABASE_TEXT_FIELD_LENGTH = 1e4;
 const MAX_ITEM_COUNT_PER_QUERY = 1e3;
 
+const type_values = ['public', 'private'];
 const city_values = ['Adana', 'Adıyaman', 'Afyon', 'Ağrı', 'Amasya', 'Ankara', 'Antalya', 'Artvin', 'Aydın', 'Balıkesir', 'Bilecik', 'Bingöl', 'Bitlis', 'Bolu', 'Burdur', 'Bursa', 'Çanakkale', 'Çankırı', 'Çorum', 'Denizli', 'Diyarbakır', 'Edirne', 'Elazığ', 'Erzincan', 'Erzurum', 'Eskişehir',  'Gaziantep', 'Giresun', 'Gümüşhane', 'Hakkari', 'Hatay', 'Isparta', 'Mersin', 'İstanbul', 'İzmir',   'Kars', 'Kastamonu', 'Kayseri', 'Kırklareli', 'Kırşehir', 'Kocaeli', 'Konya', 'Kütahya', 'Malatya',   'Manisa', 'Kahramanmaraş', 'Mardin', 'Muğla', 'Muş', 'Nevşehir', 'Niğde', 'Ordu', 'Rize', 'Sakarya',  'Samsun', 'Siirt', 'Sinop', 'Sivas', 'Tekirdağ', 'Tokat', 'Trabzon', 'Tunceli', 'Şanlıurfa', 'Uşak',  'Van', 'Yozgat', 'Zonguldak', 'Aksaray', 'Bayburt', 'Karaman', 'Kırıkkale', 'Batman', 'Şırnak',  'Bartın', 'Ardahan', 'Iğdır', 'Yalova', 'Karabük', 'Kilis', 'Osmaniye', 'Düzce'];
 const cyprus_city_values = ['Gazimağusa', 'Girne', 'Güzelyurt', 'İskele', 'Lefke', 'Lefkoşa'];
 
@@ -32,6 +33,13 @@ const UniversitySchema = new Schema({
   is_completed: {
     type: Boolean,
     default: false
+  },
+  type: {
+    type: String,
+    rdefault: null,
+    trim: true,
+    minlength: 1,
+    maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
   },
   logo: {
     type: String,
@@ -88,6 +96,7 @@ UniversitySchema.statics.createUniversity = function (data, callback) {
 
   const newUniversityData = {
     name: data.name.trim(),
+    type: data.type && type_values.includes(data.type.toString().trim()) ? data.type.toString().trim() : null,
     short_name: data.short_name && typeof data.short_name && data.short_name.trim().length ? data.short_name : null,
     city: (data.city && (data.is_cyprus_university ? cyprus_city_values : city_values).includes(data.city)) ? data.city : null,
     is_cyprus_university: data.is_cyprus_university ? true : false,
@@ -174,6 +183,7 @@ UniversitySchema.statics.findUniversityByIdAndUpdate = function (id, data, callb
 
       University.findByIdAndUpdate(university._id, {$set: {
         name: data.name && typeof data.name == 'string' && data.name.trim().length && data.name.length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.name.trim() : university.name,
+        type: data.type && type_values.includes(data.type.toString().trim()) ? data.type.toString().trim() : university.type,
         short_name: data.short_name && typeof data.short_name == 'string' && data.short_name.trim().length && data.short_name.length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.short_name.trim() : university.short_name,
         city: (data.city && (data.is_cyprus_university ? cyprus_city_values : city_values).includes(data.city)) ? data.city : university.city,
         rector: data.rector && typeof data.rector && data.rector.trim().length ? data.rector : university.rector,

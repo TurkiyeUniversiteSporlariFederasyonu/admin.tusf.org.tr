@@ -39,6 +39,7 @@ window.addEventListener('load', () => {
       
       const name = document.getElementById('name-input').value;
       const shortName = document.getElementById('short-name-input').value;
+      const type = document.getElementById('type-input').value;
       const logo = document.getElementById('logo-input-wrapper').querySelector('img') ? document.getElementById('logo-input-wrapper').querySelector('img').src : null;
       const city = document.getElementById('city-input').value;
       const rector = document.getElementById('rector-input').value;
@@ -52,6 +53,7 @@ window.addEventListener('load', () => {
         name,
         is_cyprus_university: isCyprusUniversity,
         short_name: shortName,
+        type,
         logo,
         city,
         rector

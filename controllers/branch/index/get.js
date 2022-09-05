@@ -18,6 +18,7 @@ module.exports = (req, res) => {
         },
         url: '/branch',
         manager: req.session.manager,
+        branch_page: req.query.page,
         branch_count: count,
         branches
       });

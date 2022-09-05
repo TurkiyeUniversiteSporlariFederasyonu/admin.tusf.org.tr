@@ -33,6 +33,7 @@ if (cluster.isMaster) {
   const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/tusf';
   const MAX_SERVER_UPLOAD_LIMIT = 52428800;
   const MAX_SERVER_PARAMETER_LIMIT = 50000;
+  const QUERY_LIMIT = 100;
 
   const activityRouteController = require('./routes/activityRoute');
   const adminRouteController = require('./routes/adminRoute');
@@ -79,6 +80,10 @@ if (cluster.isMaster) {
       req.query = {};
     if (!req.body || typeof req.body != 'object')
       req.body = {};
+
+    res.locals.QUERY_LIMIT = QUERY_LIMIT;
+    req.query.limit = QUERY_LIMIT;
+
     next();
   });
 

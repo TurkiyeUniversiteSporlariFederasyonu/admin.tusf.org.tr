@@ -18,7 +18,7 @@ const ID_NUMBER_LENGTH = 11;
 const TEN_MINS_IN_MS = 10 * 60 * 1000;
 const MAX_DATABASE_TEXT_FIELD_LENGTH = 1e4;
 const MAX_ITEM_COUNT_PER_QUERY = 1e3;
-const MIN_PASSWORD_LENGTH = 1;
+const MIN_PASSWORD_LENGTH = 8;
 const SECURE_STRING_LENGTH = 32;
 
 const Schema = mongoose.Schema;
