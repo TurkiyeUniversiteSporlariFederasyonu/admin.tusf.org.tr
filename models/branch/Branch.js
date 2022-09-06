@@ -4,7 +4,7 @@ const validator = require('validator');
 
 const getBranch = require('./functions/getBranch');
 
-const type_values = ['individual', 'team'];
+const type_values = ['individual', 'team', 'individual_team'];
 const gender_values = ['male', 'female', 'mix'];
 
 const DUPLICATED_UNIQUE_FIELD_ERROR_CODE = 11000;
@@ -105,7 +105,7 @@ BranchSchema.statics.createBranch = function (data, callback) {
     data.categories = [];
   else
     data.categories = data.categories.filter(each => typeof each == 'string' && each.trim().length && each.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH);
-  
+
   if (!data.gender || !gender_values.includes(data.gender.toString()))
     return callback('bad_request');
 
@@ -124,12 +124,12 @@ BranchSchema.statics.createBranch = function (data, callback) {
   else
     data.bronze_count = parseInt(data.bronze_count);
 
-  if (data.type == 'individual' || !data.team_min_size || isNaN(parseInt(data.team_min_size)) || parseInt(data.team_min_size) < 1)
+  if (data.type != 'team' || !data.team_min_size || isNaN(parseInt(data.team_min_size)) || parseInt(data.team_min_size) < 1)
     data.team_min_size = null;
   else
     data.team_min_size = parseInt(data.team_min_size);
 
-  if (data.type == 'individual' || !data.team_max_size || isNaN(parseInt(data.team_max_size)) || parseInt(data.team_max_size) < 1)
+  if (data.type != 'team' || !data.team_max_size || isNaN(parseInt(data.team_max_size)) || parseInt(data.team_max_size) < 1)
     data.team_max_size = null;
   else
     data.team_max_size = parseInt(data.team_max_size);

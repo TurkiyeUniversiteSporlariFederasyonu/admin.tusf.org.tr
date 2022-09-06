@@ -1,7 +1,8 @@
 module.exports = (req, res) => {
   const types = {
-    individual: 'Bireysel',
-    team: 'Takım'
+    individual_team: 'Bireysel (Takım Tasnifi)',
+    team: 'Takım',
+    individual: 'Bireysel'
   };
   const genders = {
     mix: 'Karma',
