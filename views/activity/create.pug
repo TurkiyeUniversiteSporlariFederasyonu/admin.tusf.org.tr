@@ -10,6 +10,8 @@ block main
   .general-form-outer-wrapper
     .general-form-left-column
       .general-form-wrapper
+        .general-form-input-title.general-form-input-title-required Sezon
+        input.general-text-input-small#season-input(type='text' placeholder='Sezon' value=season)
         .general-form-input-title.general-form-input-title-required Branş
         .general-select-input-wrapper
           input.general-select-input-value.display-none#branch-id-input(type='text')
@@ -17,24 +19,24 @@ block main
           .general-select-input-options-wrapper#branch-options-wrapper
             each branch in branches
               .general-select-input-each-option(id='select-input-' + branch._id.toString())= branch.name
-        .general-form-input-title.general-form-input-title-required Tip
+        .general-form-input-title Tip
         .general-select-input-wrapper
           input.general-select-input-value.display-none#type-input(type='text')
           input.general-select-input-search#type-search-input(type='text' placeholder='Listeden Seçin')
           .general-select-input-options-wrapper#type-options-wrapper
             each type_item in types
               .general-select-input-each-option(id='select-input-' + type_item)= type_item
-        .general-form-input-title.general-form-input-title-required Etap
+        .general-form-input-title Etap
         .general-select-input-wrapper
           input.general-select-input-value.display-none#stage-input(type='text')
           input.general-select-input-search#stage-search-input(type='text' placeholder='Listeden Seçin')
           .general-select-input-options-wrapper#stage-options-wrapper
             each stage in stages
               .general-select-input-each-option(id='select-input-' + stage)= stage
-        .general-form-input-title.general-form-input-title-required Üniversite
+        .general-form-input-title.general-form-input-title-required Düzenleyen Kurum
         .general-select-input-wrapper
           input.general-select-input-value.display-none#university-id-input(type='text')
-          input.general-select-input-search#university-search-input(type='text' placeholder='Listeden Seçin')
+          input.general-select-input-search#university-search-input(type='text' placeholder='Listeden seçin veya Herhangi bir isim girin')
           .general-select-input-options-wrapper#university-options-wrapper
             each university in universities
               .general-select-input-each-option(id='select-input-' + university._id)= university.name

@@ -1,34 +1,32 @@
+const isSeasonValid = require('../../../utils/isSeasonValid');
+
 const MAX_DATABASE_TEXT_FIELD_LENGTH = 1e4;
 
 const gender_names = {
   male: 'Erkek',
   female: 'Kadın',
-  mix: 'Karma'
+  mix: 'Erkek - Kadın'
 };
-const type_values = ['1. Lig', '2. Lig', 'Grup Müsabakaları', 'Klasman Ligi', 'Playoff', 'Süper Lige Yükselme', 'Süperlig', 'Şenlik', 'Turnuva', 'Türkiye Kupası', 'Türkiye Şampiyonası', 'Kış Spor Oyunları Seçme Müsabakaları'];
-const stage_values = ['1. Etap', '2. Etap', '3. Etap', '4. Etap', 'ÜNİLİG', 'ÜNİLİG Finalleri', 'Fetih Sporfest', 'GNÇ Sporfest'];
+const city_values = ['Gazimağusa', 'Girne', 'Güzelyurt', 'İskele', 'Lefke', 'Lefkoşa', 'Adana', 'Adıyaman', 'Afyon', 'Ağrı', 'Amasya', 'Ankara', 'Antalya', 'Artvin', 'Aydın', 'Balıkesir', 'Bilecik', 'Bingöl', 'Bitlis', 'Bolu', 'Burdur', 'Bursa', 'Çanakkale', 'Çankırı', 'Çorum', 'Denizli', 'Diyarbakır', 'Edirne', 'Elazığ', 'Erzincan', 'Erzurum', 'Eskişehir',  'Gaziantep', 'Giresun', 'Gümüşhane', 'Hakkari', 'Hatay', 'Isparta', 'Mersin', 'İstanbul', 'İzmir',   'Kars', 'Kastamonu', 'Kayseri', 'Kırklareli', 'Kırşehir', 'Kocaeli', 'Konya', 'Kütahya', 'Malatya',   'Manisa', 'Kahramanmaraş', 'Mardin', 'Muğla', 'Muş', 'Nevşehir', 'Niğde', 'Ordu', 'Rize', 'Sakarya',  'Samsun', 'Siirt', 'Sinop', 'Sivas', 'Tekirdağ', 'Tokat', 'Trabzon', 'Tunceli', 'Şanlıurfa', 'Uşak',  'Van', 'Yozgat', 'Zonguldak', 'Aksaray', 'Bayburt', 'Karaman', 'Kırıkkale', 'Batman', 'Şırnak',  'Bartın', 'Ardahan', 'Iğdır', 'Yalova', 'Karabük', 'Kilis', 'Osmaniye', 'Düzce'];
 
 module.exports = data => {
   if (!data || typeof data != 'object')
     return null;
 
-  if (!data.season || typeof data.season != 'string' || !data.season.trim().length || data.season.trim().length > MAX_DATABASE_TEXT_FIELD_LENGTH)
+  if (!data.season || !isSeasonValid(data.season))
     return null;
 
   if (!data.branch_name || typeof data.branch_name != 'string' || !data.branch_name.trim().length || !data.branch_name.trim().length > MAX_DATABASE_TEXT_FIELD_LENGTH)
     return null;
 
-  if (!data.type || !type_values.includes(data.type))
-    return null;
-
-  if (!data.stage || !stage_values.includes(data.stage))
-    return null;
-
-  if (!data.university_name || typeof data.university_name != 'string' || !data.university_name.trim().length || data.university_name.trim().length > MAX_DATABASE_TEXT_FIELD_LENGTH)
+  if (!data.organizer || typeof data.organizer != 'string' || !data.organizer.trim().length || data.organizer.trim().length > MAX_DATABASE_TEXT_FIELD_LENGTH)
     return null;
 
   if (!data.gender || !gender_names[data.gender.toString()])
     return null;
 
-  return data.season.trim() + ' ' + data.branch_name.trim() + ' ' + data.type.trim() + ' ' +  data.stage.trim() + ' ' + data.university_name.trim() + ' ' + gender_names[data.gender.toString()];
+  if (!data.city || !city_values.includes(data.city))
+    return null;
+
+  return data.season.trim() + ' ' + data.branch_name.trim() + ' ' + (data.stage && typeof data.stage == 'string' ? data.stage.trim() + ' ' : '') + (data.type && typeof data.type == 'string' ? data.type.trim() + ' ' : '') + data.organizer.trim() + ' ' + data.city.trim() + ' (' + gender_names[data.gender.toString()] + ')';
 }

@@ -83,7 +83,6 @@ const UserSchema = new Schema({
   },
   id_number: {
     type: String,
-    unique: true,
     trim: true,
     sparse: true,
     length: ID_NUMBER_LENGTH,

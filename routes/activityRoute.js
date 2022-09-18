@@ -8,11 +8,13 @@ const createGetController = require('../controllers/activity/create/get');
 const deleteGetController = require('../controllers/activity/delete/get');
 const editGetController = require('../controllers/activity/edit/get');
 const indexGetController = require('../controllers/activity/index/get');
+const resultGetController = require('../controllers/activity/result/get');
 
 const createPostController = require('../controllers/activity/create/post');
 const deletePostController = require('../controllers/activity/delete/post');
 const editPostController = require('../controllers/activity/edit/post');
 const restorePostController = require('../controllers/activity/restore/post');
+const resultPostController = require('../controllers/activity/result/post');
 
 router.get(
   '/',
@@ -38,6 +40,11 @@ router.get(
     isAuthorized,
     editGetController
 );
+router.get(
+  '/result',
+    isLoggedIn,
+    resultGetController
+);
 
 router.post(
   '/create',
@@ -62,6 +69,11 @@ router.post(
     isLoggedIn,
     isAuthorized,
     restorePostController
+);
+router.post(
+  '/result',
+    isLoggedIn,
+    resultPostController
 );
 
 module.exports = router;

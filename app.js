@@ -11,7 +11,9 @@ const session = require('express-session');
 
 const MongoStore = require('connect-mongo');
 
-const numCPUs = process.env.WEB_CONCURRENCY || require('os').cpus().length;
+const numCPUs = 1 || process.env.WEB_CONCURRENCY || require('os').cpus().length;
+
+const updateScript = require('./utils/updateScript');
 
 if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`);

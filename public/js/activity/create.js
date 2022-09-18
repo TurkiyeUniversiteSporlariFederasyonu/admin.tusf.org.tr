@@ -7,7 +7,7 @@ window.addEventListener('load', () => {
       const branchId = document.getElementById('branch-id-input').value;
       const type = document.getElementById('type-input').value;
       const stage = document.getElementById('stage-input').value;
-      const universityId = document.getElementById('university-id-input').value;
+      const organizer = document.getElementById('university-search-input').value;
       const gender = document.getElementById('gender-input').value;
       const otherDetails = document.getElementById('other-details-input').value;
       const isActive = document.getElementById('is-active-input').querySelector('.general-checked-input-item-selected') ? true : false;
@@ -36,8 +36,8 @@ window.addEventListener('load', () => {
       if (!stage || !stage.trim().length)
         return error.innerHTML = 'Lütfen faaliyet etabını seçiniz.';
 
-      if (!universityId || !universityId.trim().length)
-        return error.innerHTML = 'Lütfen faaliyeti düzenleyen üniversiteyi seçiniz.';
+      if (!organizer || !organizer.trim().length)
+        return error.innerHTML = 'Lütfen faaliyeti düzenleyen kurumu yazın.';
 
       if (!gender || !gender.trim().length)
         return error.innerHTML = 'Lütfen faaliyetin cinsiyetini seçiniz.';

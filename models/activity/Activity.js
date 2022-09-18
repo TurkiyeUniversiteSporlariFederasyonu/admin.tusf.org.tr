@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 const getCurrentSeason = require('../../utils/getCurrentSeason');
+const isSeasonValid = require('../../utils/isSeasonValid');
 
 const Branch = require('../branch/Branch');
 const University = require('../university/University');
@@ -11,8 +12,9 @@ const formatActivityName = require('./functions/formatActivityName');
 const formatPhoneNumber = require('./functions/formatPhoneNumber');
 const getActivity = require('./functions/getActivity');
 
+const city_values = ['Gazimağusa', 'Girne', 'Güzelyurt', 'İskele', 'Lefke', 'Lefkoşa', 'Adana', 'Adıyaman', 'Afyon', 'Ağrı', 'Amasya', 'Ankara', 'Antalya', 'Artvin', 'Aydın', 'Balıkesir', 'Bilecik', 'Bingöl', 'Bitlis', 'Bolu', 'Burdur', 'Bursa', 'Çanakkale', 'Çankırı', 'Çorum', 'Denizli', 'Diyarbakır', 'Edirne', 'Elazığ', 'Erzincan', 'Erzurum', 'Eskişehir',  'Gaziantep', 'Giresun', 'Gümüşhane', 'Hakkari', 'Hatay', 'Isparta', 'Mersin', 'İstanbul', 'İzmir',   'Kars', 'Kastamonu', 'Kayseri', 'Kırklareli', 'Kırşehir', 'Kocaeli', 'Konya', 'Kütahya', 'Malatya',   'Manisa', 'Kahramanmaraş', 'Mardin', 'Muğla', 'Muş', 'Nevşehir', 'Niğde', 'Ordu', 'Rize', 'Sakarya',  'Samsun', 'Siirt', 'Sinop', 'Sivas', 'Tekirdağ', 'Tokat', 'Trabzon', 'Tunceli', 'Şanlıurfa', 'Uşak',  'Van', 'Yozgat', 'Zonguldak', 'Aksaray', 'Bayburt', 'Karaman', 'Kırıkkale', 'Batman', 'Şırnak',  'Bartın', 'Ardahan', 'Iğdır', 'Yalova', 'Karabük', 'Kilis', 'Osmaniye', 'Düzce'];
 const gender_values = ['male', 'female', 'mix'];
-const type_values = ['1. Lig', '2. Lig', 'Grup Müsabakaları', 'Klasman Ligi', 'Playoff', 'Süper Lige Yükselme', 'Süperlig', 'Şenlik', 'Turnuva', 'Türkiye Kupası', 'Türkiye Şampiyonası', 'Kış Spor Oyunları Seçme Müsabakaları'];
+const type_values = ['1. Lig', '2. Lig', 'Grup Müsabakaları', 'Klasman Ligi', 'Playoff', 'Süperlige Yükselme', 'Süperlig', 'Şenlik', 'Turnuva', 'Türkiye Kupası', 'Türkiye Şampiyonası', 'Kış Spor Oyunları Seçme Müsabakaları'];
 const stage_values = ['1. Etap', '2. Etap', '3. Etap', '4. Etap', 'ÜNİLİG', 'ÜNİLİG Finalleri', 'Fetih Sporfest', 'GNÇ Sporfest'];
 
 const DUPLICATED_UNIQUE_FIELD_ERROR_CODE = 11000;
@@ -29,6 +31,13 @@ const ActivitySchema = new Schema({
     minlength: 1,
     maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
   },
+  old_id: {
+    type: String,
+    default: null,
+    sparse: true,
+    length: 4,
+    trim: true
+  },
   branch_id: {
     type: mongoose.Types.ObjectId,
     required: true
@@ -42,19 +51,29 @@ const ActivitySchema = new Schema({
   },
   type: {
     type: String,
-    required: true,
+    default: null,
     minlength: 1,
     maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
   },
   stage: {
     type: String,
-    required: true,
+    default: null,
     minlength: 1,
     maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
   },
-  university_id: {
-    type: mongoose.Types.ObjectId,
-    required: true
+  organizer: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 1,
+    maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
+  },
+  city: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 1,
+    maxlength: MAX_DATABASE_TEXT_FIELD_LENGTH
   },
   is_deleted: {
     type: Boolean,
@@ -143,77 +162,150 @@ ActivitySchema.statics.createActivity = function (data, callback) {
   Branch.findBranchById(data.branch_id, (err, branch) => {
     if (err) return callback(err);
 
-    University.findUniversityById(data.university_id, (err, university) => {
-      if (err) return callback(err);
+    if (!data.gender || !gender_values.includes(data.gender))
+      return callback('bad_request');
 
-      if (!data.type || !type_values.includes(data.type))
-        return callback('bad_request');
+    if (!data.city || !city_values.includes(data.city))
+      return callback('bad_request');
 
-      if (!data.stage || !stage_values.includes(data.stage))
-        return callback('bad_request');
+    if (!data.type || !type_values.includes(data.type))
+      data.type = null;
 
-      if (!data.gender || !gender_values.includes(data.gender))
-        return callback('bad_request');
+    if (!data.stage || !stage_values.includes(data.stage))
+      data.stage = null;
 
-      const newActivityData = {
-        branch_id: branch._id,
-        season: getCurrentSeason(),
-        type: data.type,
-        stage: data.stage,
-        university_id: university._id,
-        gender: data.gender,
-        other_details: data.other_details && typeof data.other_details == 'string' && data.other_details.trim().length && data.other_details.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.other_details.trim() : null,
-        is_active: data.is_active ? true : false,
-        is_on_calendar: data.is_on_calendar ? true : false,
-        is_without_age_control: data.is_without_age_control ? true : false,
-        athlete_count: data.athlete_count && !isNaN(parseInt(data.athlete_count)) ? parseInt(data.athlete_count) : null,
-        foreign_athlete_count: data.foreign_athlete_count && !isNaN(parseInt(data.foreign_athlete_count)) ? parseInt(data.foreign_athlete_count) : null,
-        start_date: data.start_date && !isNaN(new Date(data.start_date)) ? new Date(data.start_date) : null,
-        end_date: data.end_date && !isNaN(new Date(data.end_date)) ? new Date(data.end_date) : null,
-        last_application_date: data.last_application_date && !isNaN(new Date(data.last_application_date)) ? new Date(data.last_application_date) : null,
-        federation_representative: (data.federation_representative && typeof data.federation_representative == 'object' ?
-        {
-          name: data.federation_representative.name && typeof data.federation_representative.name == 'string' && data.federation_representative.name.trim().length && data.federation_representative.name.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.federation_representative.name.trim() : null,
-          phone_number: formatPhoneNumber(data.federation_representative.phone_number) ? formatPhoneNumber(data.federation_representative.phone_number) : null
-        } :
-        {
-          name: null,
-          phone_number: null
-        }),
-        technique_meeting: (data.technique_meeting && typeof data.technique_meeting == 'object' ?
-        {
-          place: data.technique_meeting.place && typeof data.technique_meeting.place == 'string' && data.technique_meeting.place.trim().length && data.technique_meeting.place.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.technique_meeting.place.trim() : null,
-          time: data.technique_meeting.time && !isNaN(new Date(data.technique_meeting.time)) ? new Date(data.technique_meeting.time) : null,
-        } :
-        {
-          place: null,
-          time: null
-        })
-      }
-
-      newActivityData.name = formatActivityName({
-        season: getCurrentSeason(),
-        branch_name: branch.name,
-        type: newActivityData.type,
-        stage: newActivityData.stage,
-        university_name: university.name,
-        gender: newActivityData.gender
+    if (data.university_id) {
+      University.findUniversityById(data.university_id, (err, university) => {
+        if (err) return callback(err);
+  
+        const newActivityData = {
+          old_id: data.old_id && typeof data.old_id == 'string' ? data.old_id : null,
+          branch_id: branch._id,
+          season: isSeasonValid(data.season) ? data.season.trim() : getCurrentSeason(),
+          type: data.type,
+          stage: data.stage,
+          gender: data.gender,
+          organizer: university.name,
+          city: data.city,
+          other_details: data.other_details && typeof data.other_details == 'string' && data.other_details.trim().length && data.other_details.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.other_details.trim() : null,
+          is_active: data.is_active ? true : false,
+          is_on_calendar: data.is_on_calendar ? true : false,
+          is_without_age_control: data.is_without_age_control ? true : false,
+          athlete_count: data.athlete_count && !isNaN(parseInt(data.athlete_count)) ? parseInt(data.athlete_count) : null,
+          foreign_athlete_count: data.foreign_athlete_count && !isNaN(parseInt(data.foreign_athlete_count)) ? parseInt(data.foreign_athlete_count) : null,
+          start_date: data.start_date && !isNaN(new Date(data.start_date)) ? new Date(data.start_date) : null,
+          end_date: data.end_date && !isNaN(new Date(data.end_date)) ? new Date(data.end_date) : null,
+          last_application_date: data.last_application_date && !isNaN(new Date(data.last_application_date)) ? new Date(data.last_application_date) : null,
+          federation_representative: (data.federation_representative && typeof data.federation_representative == 'object' ?
+          {
+            name: data.federation_representative.name && typeof data.federation_representative.name == 'string' && data.federation_representative.name.trim().length && data.federation_representative.name.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.federation_representative.name.trim() : null,
+            phone_number: formatPhoneNumber(data.federation_representative.phone_number) ? formatPhoneNumber(data.federation_representative.phone_number) : null
+          } :
+          {
+            name: null,
+            phone_number: null
+          }),
+          technique_meeting: (data.technique_meeting && typeof data.technique_meeting == 'object' ?
+          {
+            place: data.technique_meeting.place && typeof data.technique_meeting.place == 'string' && data.technique_meeting.place.trim().length && data.technique_meeting.place.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.technique_meeting.place.trim() : null,
+            time: data.technique_meeting.time && !isNaN(new Date(data.technique_meeting.time)) ? new Date(data.technique_meeting.time) : null,
+          } :
+          {
+            place: null,
+            time: null
+          })
+        };
+  
+        newActivityData.name = formatActivityName({
+          season: newActivityData.season,
+          branch_name: branch.name,
+          type: newActivityData.type,
+          stage: newActivityData.stage,
+          organizer: newActivityData.organizer,
+          city: newActivityData.city,
+          gender: newActivityData.gender
+        });
+  
+        if (!newActivityData.name)
+          return callback('bad_request');
+  
+        const newActivity = new Activity(newActivityData);
+  
+        newActivity.save((err, activity) => {
+          if (err && err.code == DUPLICATED_UNIQUE_FIELD_ERROR_CODE)
+            return callback('duplicated_unique_field');
+          if (err)
+            return callback(err);
+          
+          return callback(null, activity._id.toString());
+        });
       });
-
-      if (!newActivityData.name)
+    } else {
+      if (!data.organizer || typeof data.organizer != 'string' || !data.organizer.trim().length || data.organizer.length > MAX_DATABASE_TEXT_FIELD_LENGTH)
         return callback('bad_request');
 
-      const newActivity = new Activity(newActivityData);
-
-      newActivity.save((err, activity) => {
-        if (err && err.code == DUPLICATED_UNIQUE_FIELD_ERROR_CODE)
-          return callback('duplicated_unique_field');
-        if (err)
-          return callback(err);
-        
-        return callback(null, activity._id.toString());
-      });
-    });
+        const newActivityData = {
+          old_id: data.old_id && typeof data.old_id == 'string' ? data.old_id : null,
+          branch_id: branch._id,
+          season: isSeasonValid(data.season) ? data.season.trim() : getCurrentSeason(),
+          type: data.type,
+          stage: data.stage,
+          gender: data.gender,
+          organizer: data.organizer.trim(),
+          city: data.city,
+          other_details: data.other_details && typeof data.other_details == 'string' && data.other_details.trim().length && data.other_details.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.other_details.trim() : null,
+          is_active: data.is_active ? true : false,
+          is_on_calendar: data.is_on_calendar ? true : false,
+          is_without_age_control: data.is_without_age_control ? true : false,
+          athlete_count: data.athlete_count && !isNaN(parseInt(data.athlete_count)) ? parseInt(data.athlete_count) : null,
+          foreign_athlete_count: data.foreign_athlete_count && !isNaN(parseInt(data.foreign_athlete_count)) ? parseInt(data.foreign_athlete_count) : null,
+          start_date: data.start_date && !isNaN(new Date(data.start_date)) ? new Date(data.start_date) : null,
+          end_date: data.end_date && !isNaN(new Date(data.end_date)) ? new Date(data.end_date) : null,
+          last_application_date: data.last_application_date && !isNaN(new Date(data.last_application_date)) ? new Date(data.last_application_date) : null,
+          federation_representative: (data.federation_representative && typeof data.federation_representative == 'object' ?
+          {
+            name: data.federation_representative.name && typeof data.federation_representative.name == 'string' && data.federation_representative.name.trim().length && data.federation_representative.name.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.federation_representative.name.trim() : null,
+            phone_number: formatPhoneNumber(data.federation_representative.phone_number) ? formatPhoneNumber(data.federation_representative.phone_number) : null
+          } :
+          {
+            name: null,
+            phone_number: null
+          }),
+          technique_meeting: (data.technique_meeting && typeof data.technique_meeting == 'object' ?
+          {
+            place: data.technique_meeting.place && typeof data.technique_meeting.place == 'string' && data.technique_meeting.place.trim().length && data.technique_meeting.place.trim().length < MAX_DATABASE_TEXT_FIELD_LENGTH ? data.technique_meeting.place.trim() : null,
+            time: data.technique_meeting.time && !isNaN(new Date(data.technique_meeting.time)) ? new Date(data.technique_meeting.time) : null,
+          } :
+          {
+            place: null,
+            time: null
+          })
+        };
+  
+        newActivityData.name = formatActivityName({
+          season: newActivityData.season,
+          branch_name: branch.name,
+          type: newActivityData.type,
+          stage: newActivityData.stage,
+          organizer: newActivityData.organizer,
+          city: newActivityData.city,
+          gender: newActivityData.gender
+        });
+  
+        if (!newActivityData.name)
+          return callback('bad_request');
+  
+        const newActivity = new Activity(newActivityData);
+  
+        newActivity.save((err, activity) => {
+          if (err && err.code == DUPLICATED_UNIQUE_FIELD_ERROR_CODE)
+            return callback('duplicated_unique_field');
+          if (err)
+            return callback(err);
+          
+          return callback(null, activity._id.toString());
+        });
+    }
   });
 };
 
@@ -410,6 +502,19 @@ ActivitySchema.statics.findActivityByIdAndRestore = function (id, callback) {
 
       return callback(null);
     });
+  });
+};
+
+ActivitySchema.statics.findActivityByOldId = function (old_id, callback) {
+  const Activity = this;
+
+  Activity.findOne({
+    old_id
+  }, (err, activity) => {
+    if (err) return callback('database_error');
+    if (!activity) return callback('document_not_found');
+
+    return callback(null, activity);
   });
 };
 

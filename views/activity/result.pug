@@ -1,0 +1,43 @@
+extends ../partials/header
+block main
+  .general-title Sonuç Gir
+  .general-bread-cramp-wrapper
+    a.general-each-bread-cramp-item(href='/') Ana Sayfa
+    .general-each-bread-cramp-arrow >
+    a.general-each-bread-cramp-item(href='/activity') Faaliyetler
+    .general-each-bread-cramp-arrow >
+    .general-each-bread-cramp-item-last Sonuç Gir
+  .general-form-outer-wrapper
+    .general-form-left-column
+      .general-form-wrapper
+        .general-form-input-title.general-form-input-title-required Eski Aktivite ID
+        input.general-text-input-small#old-id-input(type='text' placeholder='Eski Activite ID')
+        .general-form-input-title.general-form-input-title-required Cinsiyet
+        .general-select-input-wrapper
+          input.general-select-input-value.display-none#gender-input(type='text')
+          input.general-select-input-search#university-search-input(type='text' placeholder='Listeden Seçin')
+          .general-select-input-options-wrapper#university-options-wrapper
+            each key in Object.keys(gender_names)
+              .general-select-input-each-option(id='select-input-' + key)= gender_names[key]
+        .general-form-input-title Alt Branş
+        input.general-text-input-small#subbranch-input(type='text' placeholder='Alt Branş')
+        .general-form-input-title Kategori
+        input.general-text-input-small#category-input(type='text' placeholder='Kategori')
+        .general-form-button-wrapper
+          .general-form-back-button#refresh-button Sıfırla
+          .general-form-button#save-button Kaydet
+        .general-form-error#error
+    .general-form-right-column
+      .general-form-wrapper
+        .general-form-input-title.general-form-input-title-required Sıralama
+        .general-custom-item-input-outer-wrapper
+          .general-custom-input-items-wrapper.general-drag-and-drop-wrapper#order-wrapper
+          .general-custom-item-input-wrapper
+            .general-select-input-wrapper.general-custom-select-input-wrapper
+              input.general-select-input-value.display-none(type='text')
+              input.general-select-input-search(type='text' placeholder='Listeden Seçin')
+              .general-select-input-options-wrapper
+                each university in universities
+                  .general-select-input-each-option(id='select-input-' + university._id)= university.name
+            svg.general-custom-input-add-button-select(width='512' height='512' viewBox='0 0 512 512' fill='var(--blue)' xmlns='http://www.w3.org/2000/svg')
+              path(d='M0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256ZM256 368C269.3 368 280 357.3 280 344V280H344C357.3 280 368 269.3 368 256C368 242.7 357.3 232 344 232H280V168C280 154.7 269.3 144 256 144C242.7 144 232 154.7 232 168V232H168C154.7 232 144 242.7 144 256C144 269.3 154.7 280 168 280H232V344C232 357.3 242.7 368 256 368Z')
