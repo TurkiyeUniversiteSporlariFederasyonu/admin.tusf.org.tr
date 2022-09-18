@@ -11,7 +11,6 @@ module.exports = (req, res) => {
     req.body.activity_id = activity._id;
 
     Result.createResult(req.body, err => {
-      console.log(err)
       if (err) {
         res.write(JSON.stringify({ error: err, success: false }));
         return res.end();

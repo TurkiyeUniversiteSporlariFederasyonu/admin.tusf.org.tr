@@ -105,8 +105,8 @@ ResultSchema.statics.createResult = function (data, callback) {
         branch.categories.push(data.category);
 
       Branch.findBranchByIdAndUpdate(branch._id, {
-        subbranches,
-        categories,
+        subbranches: branch.subbranches,
+        categories: branch.categories,
       }, err => {
         if (err) return callback(err);
 
@@ -165,3 +165,5 @@ ResultSchema.statics.createResult = function (data, callback) {
     });
   });
 };
+
+module.exports = mongoose.model('Result', ResultSchema);

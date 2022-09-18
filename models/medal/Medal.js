@@ -96,7 +96,7 @@ MedalSchema.statics.findOrCreateMedalAndIncreaseCount = function (data, callback
 
       if (medal) {
         Medal.findByIdAndUpdate(medal._id, {$inc: {
-          participation: 1,
+          total_participation: 1,
           gold: data.gold && !isNaN(parseInt(data.gold)) ? parseInt(data.gold) : 0,
           silver: data.silver && !isNaN(parseInt(data.silver)) ? parseInt(data.silver) : 0,
           bronze: data.bronze && !isNaN(parseInt(data.bronze)) ? parseInt(data.bronze) : 0
@@ -111,7 +111,7 @@ MedalSchema.statics.findOrCreateMedalAndIncreaseCount = function (data, callback
           university_id: university._id,
           type: data.type,
           stage: data.stage,
-          participation: 1,
+          total_participation: 1,
           gold: data.gold ? 1 : 0,
           silver: data.silver ? 1 : 0,
           bronze: data.bronze ? 1 : 0,
@@ -128,3 +128,5 @@ MedalSchema.statics.findOrCreateMedalAndIncreaseCount = function (data, callback
     })
   })
 }
+
+module.exports = mongoose.model('Medal', MedalSchema);
