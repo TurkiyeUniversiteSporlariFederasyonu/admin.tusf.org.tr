@@ -11,9 +11,9 @@ const session = require('express-session');
 
 const MongoStore = require('connect-mongo');
 
-const numCPUs = 1 || process.env.WEB_CONCURRENCY || require('os').cpus().length;
+const numCPUs = process.env.WEB_CONCURRENCY || require('os').cpus().length;
 
-const updateScript = require('./utils/updateScript');
+// const updateScript = require('./utils/updateScript');
 
 if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`);
@@ -44,6 +44,7 @@ if (cluster.isMaster) {
   const contestRouteController = require('./routes/contestRoute');
   const imageRouteController = require('./routes/imageRoute');
   const indexRouteController = require('./routes/indexRoute');
+  const statisticsRouteController = require('./routes/statisticsRoute');
   const universityRouteController = require('./routes/universityRoute');
   const userRouteController = require('./routes/userRoute');
   const yearRouteController = require('./routes/yearRoute');
@@ -95,6 +96,7 @@ if (cluster.isMaster) {
   app.use('/branch', branchRouteController);
   app.use('/contest', contestRouteController);
   app.use('/image', imageRouteController);
+  app.use('/statistics', statisticsRouteController);
   app.use('/university', universityRouteController);
   app.use('/user', userRouteController);
   app.use('/year', yearRouteController);

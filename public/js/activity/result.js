@@ -27,14 +27,6 @@ window.addEventListener('load', () => {
       const universityNodes = document.getElementById('order-wrapper').children;
       for (let i = 0; i < universityNodes.length; i++)
         universityIdList.push(universityNodes[i].childNodes[0].id);
-
-      console.log({
-        old_id: oldId,
-        gender,
-        subbranch,
-        category,
-        order: universityIdList
-      })
       
       serverRequest('/activity/result', 'POST', {
         old_id: oldId,
@@ -48,10 +40,8 @@ window.addEventListener('load', () => {
           return error.innerHTML = 'Bilinmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
         }
         
-        if (document.getElementById('category-input').value)
-          document.getElementById('category-input').value = '';
-        else
-         document.getElementById('subbranch-input').value = '';
+        isUploading = false;
+        document.querySelector('.general-custom-input-items-wrapper').innerHTML = '';
       });
     }
   });
