@@ -96,9 +96,9 @@ MedalSchema.statics.findOrCreateMedalAndIncreaseCount = function (data, callback
       if (medal) {
         Medal.findByIdAndUpdate(medal._id, {$inc: {
           total_participation: 1,
-          gold: data.gold && !isNaN(parseInt(data.gold)) ? 1 : 0,
-          silver: data.silver && !isNaN(parseInt(data.silver)) ? 1 : 0,
-          bronze: data.bronze && !isNaN(parseInt(data.bronze)) ? 1 : 0
+          gold: data.gold ? 1 : 0,
+          silver: data.silver ? 1 : 0,
+          bronze: data.bronze ? 1 : 0
         }}, err => {
           if (err) return callback('database_error');
 
@@ -196,19 +196,19 @@ MedalSchema.statics.createAndGetMedalOrderBy = function (data, callback) {
               if (data.by == 'medal') {
                 order.sort((a, b) => {
                   if (a.gold > b.gold)
-                    return 1;
-                  else if (b.gold > a.gold)
                     return -1;
+                  else if (b.gold > a.gold)
+                    return 1;
                   else {
                     if (a.silver > b.silver)
-                      return 1;
-                    else if (b.silver > a.silver)
                       return -1;
+                    else if (b.silver > a.silver)
+                      return 1;
                     else {
                       if (a.bronze > b.bronze)
-                        return 1;
-                      else if (b.bronze > a.bronze)
                         return -1;
+                      else if (b.bronze > a.bronze)
+                        return 1;
                       else {
                         return 0; 
                       }
@@ -218,9 +218,9 @@ MedalSchema.statics.createAndGetMedalOrderBy = function (data, callback) {
               } else if (data.by == 'participation') {
                 order.sort((a, b) => {
                   if (a.total_participation > b.total_participation)
-                    return 1;
-                  else if (b.total_participation > a.total_participation)
                     return -1;
+                  else if (b.total_participation > a.total_participation)
+                    return 1;
                   else
                     return 0;
                 });

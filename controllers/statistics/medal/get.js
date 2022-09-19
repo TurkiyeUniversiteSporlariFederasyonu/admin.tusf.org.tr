@@ -13,7 +13,7 @@ module.exports = (req, res) => {
       title: '2021 - 2022 Medalya Sıralaması',
       includes: {
         external: {
-          css: ['confirm', 'bread-cramp', 'header', 'fontawesome', 'general', 'list', 'page', 'text'],
+          css: ['confirm', 'bread-cramp', 'header', 'fontawesome', 'general', 'table', 'page', 'text'],
           js: ['confirm', 'ancestorWithClassName', 'header', 'page', 'serverRequest', 'throwError']
         }
       },

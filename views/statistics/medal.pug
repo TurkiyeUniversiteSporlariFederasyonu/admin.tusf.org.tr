@@ -1,3 +1,20 @@
 extends ../partials/header
 block main
-  - console.log(order.filter(each => each.gold > 0))
+  .general-title Madalya Sıralaması (2021 - 2022)
+  .general-bread-cramp-wrapper
+    a.general-each-bread-cramp-item(href='/') Ana Sayfa
+    .general-each-bread-cramp-arrow >
+    .general-each-bread-cramp-item-last Madalya Sıralaması (2021 - 2022)
+  .general-table-wrapper
+    .general-table-header-wrapper
+      .general-each-table-header-item(style='width: calc(100% - 3 * 200px);') Üniversite İsmi
+      .general-each-table-header-item(style='width: 200px;') Altın
+      .general-each-table-header-item(style='width: 200px;') Gümüş
+      .general-each-table-header-item(style='width: 200px;') Bronz
+    each university in order
+      .general-each-table-item-wrapper
+        .general-each-table-item(style='width: calc(100% - 3 * 200px);')= university.name
+        .general-each-table-item(style='width: 200px;')= university.gold
+        .general-each-table-item(style='width: 200px;')= university.silver
+        .general-each-table-item(style='width: 200px;')= university.bronze
+      
