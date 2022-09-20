@@ -135,7 +135,8 @@ MedalSchema.statics.createAndGetMedalOrderBy = function (data, callback) {
     return callback('bad_request');
 
   const filters = {
-    season: data.season.trim()
+    season: data.season.trim(),
+    type: { $ne: 'Süperlige Yükselme' }
   };
 
   if (data.type && typeof data.type == 'string' && type_values.includes(data.type))

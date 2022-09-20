@@ -21,5 +21,5 @@ module.exports = (req, res) => {
       manager: req.session.manager,
       order
     });
-  })
+  });
 }
