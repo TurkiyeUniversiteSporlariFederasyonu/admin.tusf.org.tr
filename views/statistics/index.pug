@@ -1,0 +1,11 @@
+extends ../partials/header
+block main
+  .general-title Madalya Sıralaması (2021 - 2022)
+  .general-bread-cramp-wrapper
+    a.general-each-bread-cramp-item(href='/') Ana Sayfa
+    .general-each-bread-cramp-arrow >
+    .general-each-bread-cramp-item-last Madalya Sıralaması (2021 - 2022)
+  .general-list-wrapper
+    each branch in branches
+      a.general-each-list-item(href='/statistics/result?branch_id=' + branch._id)
+        .general-each-list-item-title #{branch.name}

@@ -10,7 +10,7 @@ module.exports = (req, res) => {
 
     return res.render('statistics/medal', {
       page: 'statistics/medal',
-      title: '2021 - 2022 Medalya Sıralaması',
+      title: '2021 - 2022 Madalya Sıralaması',
       includes: {
         external: {
           css: ['confirm', 'bread-cramp', 'header', 'fontawesome', 'general', 'table', 'page', 'text'],

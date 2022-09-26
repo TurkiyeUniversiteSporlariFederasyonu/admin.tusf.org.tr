@@ -11,6 +11,7 @@
 }
 
 .general-each-list-item {
+  text-decoration: none;
   margin-bottom: var(--content-margin);
   width: calc(100vw - 2 * var(--page-padding));
   margin-left: 50%;
