@@ -1,6 +1,7 @@
 let isUploading = false;
 
 window.addEventListener('load', () => {
+  const activity = JSON.parse(document.getElementById('activity').value);
   const results = JSON.parse(document.getElementById('results').value);
   const universities = JSON.parse(document.getElementById('universities').value);
 
@@ -28,6 +29,7 @@ window.addEventListener('load', () => {
         universityIdList.push(universityNodes[i].childNodes[0].id);
       
       serverRequest('/activity/result', 'POST', {
+        activity_id: activity._id,
         gender,
         subbranch,
         category,

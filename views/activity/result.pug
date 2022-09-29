@@ -1,12 +1,13 @@
 extends ../partials/header
 block main
+  input.display-none#activity(value=JSON.stringify(activity))
   input.display-none#results(value=JSON.stringify(results))
   input.display-none#universities(value=JSON.stringify(universities))
   .general-title Faaliyet Sonuçları - #{activity.name}
   .general-bread-cramp-wrapper
     a.general-each-bread-cramp-item(href='/') Ana Sayfa
     .general-each-bread-cramp-arrow >
-    a.general-each-bread-cramp-item(href='/activity') Faaliyetler
+    a.general-each-bread-cramp-item(href='/activity?season=' + activity.season) Faaliyetler
     .general-each-bread-cramp-arrow >
     .general-each-bread-cramp-item-last Faaliyet Sonuçları - #{activity.name}
   .general-form-outer-wrapper

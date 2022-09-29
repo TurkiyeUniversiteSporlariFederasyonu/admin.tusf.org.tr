@@ -6,7 +6,6 @@ const isSeasonValid = require('../../utils/isSeasonValid');
 
 const Activity = require('../activity/Activity');
 const Branch = require('../branch/Branch');
-const Medal = require('../medal/Medal');
 const University = require('../university/University');
 
 const gender_values = ['male', 'female', 'mix'];
@@ -143,21 +142,10 @@ ResultSchema.statics.createOrUpdateResult = function (data, callback) {
             else if (time < branch.gold_count + branch.silver_count + branch.bronze_count)
               bronze.push(university._id.toString());
 
-            return next(null);
+            return next(null, university._id.toString());
           }),
           (err, order) => {
             if (err) return callback(err);
-
-            const data = {
-              activity_id: activity._id,
-              subbranch: data.subbranch,
-              category: data.category,
-              gender: data.gender,
-              gold,
-              silver,
-              bronze,
-              order
-            };
 
             Result.findOne({
               activity_id: activity._id,
@@ -168,8 +156,6 @@ ResultSchema.statics.createOrUpdateResult = function (data, callback) {
               if (err) return callback('database_error');
 
               if (result) {
-                console.log(result);
-
                 Result.findByIdAndUpdate(result._id, {$set: {
                   gold,
                   silver,
