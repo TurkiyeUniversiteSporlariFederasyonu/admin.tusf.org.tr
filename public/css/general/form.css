@@ -55,7 +55,7 @@
   min-height: fit-content;
   margin-top: var(--small-distance);
 }
-.general-form-back-button {
+.general-form-back-button, .general-form-second-button {
   width: var(--form-button-width);
   min-width: var(--form-button-width);
   height: var(--form-button-height);
@@ -74,6 +74,10 @@
   border: var(--bold-border-width) solid var(--red);
   cursor: pointer;
   margin-left: auto;
+}
+.general-form-second-button {
+  border-color: var(--blue) !important;
+  color: var(--blue) !important;
 }
 .general-form-button {
   width: var(--form-button-width);

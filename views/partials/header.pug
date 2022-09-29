@@ -29,7 +29,8 @@ block content
                 path(d='M135.887 23.8875L80.2806 79.8875C77.1744 82.6438 73.5869 84 69.9994 84C66.4119 84 62.8331 82.6328 60.0988 79.8984L4.49251 23.8984C0.0975633 19.9062 -1.10136 13.8688 1.06601 8.6625C3.23339 3.45625 8.34251 0 13.9994 0H125.606C131.267 0 136.377 3.40419 138.547 8.64062C140.717 13.8771 139.912 19.9063 135.887 23.8875Z')
               .each-all-header-menu-title Etkinlikler
             .each-all-header-menu
-              a.each-all-header-menu-button(href='/activity') Faaliyetler
+              a.each-all-header-menu-button(href='/activity') Faaliyetler (#{CURRENT_SEASON})
+              a.each-all-header-menu-button(href='/activity?season=2021 - 2022') Faaliyetler (2021 - 2022)
               if manager.roles.includes('activity_create')
                 a.each-all-header-menu-button(href='/activity/create') Yeni Faaliyet Yarat
               if manager.roles.includes('activity_delete')
@@ -62,7 +63,8 @@ block content
               path(d='M135.887 23.8875L80.2806 79.8875C77.1744 82.6438 73.5869 84 69.9994 84C66.4119 84 62.8331 82.6328 60.0988 79.8984L4.49251 23.8984C0.0975633 19.9062 -1.10136 13.8688 1.06601 8.6625C3.23339 3.45625 8.34251 0 13.9994 0H125.606C131.267 0 136.377 3.40419 138.547 8.64062C140.717 13.8771 139.912 19.9063 135.887 23.8875Z')
             .each-all-header-menu-title İstatistikler
           .each-all-header-menu
-            a.each-all-header-menu-button(href='/statistics') Madalya Sıralaması (2021 - 2022)
+            a.each-all-header-menu-button(href='/statistics/medal') Genel Madalya Sıralaması (2021 - 2022)
+            a.each-all-header-menu-button(href='/statistics') Branş Madalya Sıralaması (2021 - 2022)
       .all-header-user-name= manager.name
       a.all-header-logout-button(href='/admin/logout') Çıkış Yap
     .all-content

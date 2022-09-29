@@ -27,5 +27,12 @@ window.addEventListener('load', () => {
 
       window.location = '/activity/edit?id=' + id;
     }
+
+    if (ancestorWithClassName(event.target, 'result-activity-button')) {
+      const target = ancestorWithClassName(event.target, 'result-activity-button');
+      const id = target.parentNode.id;
+
+      window.location = '/activity/result?id=' + id;
+    }
   });
 });

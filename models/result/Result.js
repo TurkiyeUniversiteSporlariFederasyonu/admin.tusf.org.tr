@@ -74,7 +74,22 @@ ResultSchema.statics.findResultById = function (id, callback) {
   });
 };
 
-ResultSchema.statics.createResult = function (data, callback) {
+ResultSchema.statics.findResultsByActivityId = function (activity_id, callback) {
+  const Result = this;
+
+  if (!activity_id || !validator.isMongoId(activity_id.toString()))
+    return callback('bad_request');
+
+  Result.find({
+    activity_id: mongoose.Types.ObjectId(activity_id.toString())
+  }, (err, results) => {
+    if (err) return callback('database_error');
+
+    return callback(null, results);
+  });
+}
+
+ResultSchema.statics.createOrUpdateResult = function (data, callback) {
   const Result = this;
 
   if (!data || typeof data != 'object')
@@ -110,7 +125,7 @@ ResultSchema.statics.createResult = function (data, callback) {
 
       Branch.findBranchByIdAndUpdate(branch._id, {
         subbranches: branch.subbranches,
-        categories: branch.categories,
+        categories: branch.categories
       }, err => {
         if (err) return callback(err);
 
@@ -128,24 +143,12 @@ ResultSchema.statics.createResult = function (data, callback) {
             else if (time < branch.gold_count + branch.silver_count + branch.bronze_count)
               bronze.push(university._id.toString());
 
-            Medal.findOrCreateMedalAndIncreaseCount({
-              season: activity.season,
-              university_id: university._id,
-              type: activity.type,
-              stage: activity.stage,
-              gold: gold.includes(university._id.toString()),
-              silver: silver.includes(university._id.toString()),
-              bronze: bronze.includes(university._id.toString())
-            }, err => {
-              if (err) return next(err);
-
-              return next(null, university._id.toString());
-            });
+            return next(null);
           }),
           (err, order) => {
             if (err) return callback(err);
 
-            const newResultData = {
+            const data = {
               activity_id: activity._id,
               subbranch: data.subbranch,
               category: data.category,
@@ -156,12 +159,47 @@ ResultSchema.statics.createResult = function (data, callback) {
               order
             };
 
-            const newResult = new Result(newResultData);
-
-            newResult.save((err, result) => {
+            Result.findOne({
+              activity_id: activity._id,
+              subbranch: data.subbranch,
+              category: data.category,
+              gender: data.gender
+            }, (err, result) => {
               if (err) return callback('database_error');
 
-              return callback(null, result._id.toString());
+              if (result) {
+                console.log(result);
+
+                Result.findByIdAndUpdate(result._id, {$set: {
+                  gold,
+                  silver,
+                  bronze,
+                  order
+                }}, err => {
+                  if (err) return callback('database_error');
+
+                  return callback(null, result._id.toString());
+                });
+              } else {
+                const newResultData = {
+                  activity_id: activity._id,
+                  subbranch: data.subbranch,
+                  category: data.category,
+                  gender: data.gender,
+                  gold,
+                  silver,
+                  bronze,
+                  order
+                };
+
+                const newResult = new Result(newResultData);
+
+                newResult.save((err, result) => {
+                  if (err) return callback('database_error');
+
+                  return callback(null, result._id.toString());
+                });
+              }
             });
           }
         );

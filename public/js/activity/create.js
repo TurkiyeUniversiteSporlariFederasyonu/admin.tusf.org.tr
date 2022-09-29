@@ -46,7 +46,7 @@ window.addEventListener('load', () => {
         branch_id: branchId,
         type,
         stage,
-        university_id: universityId,
+        organizer,
         gender,
         other_details: otherDetails,
         is_active: isActive,

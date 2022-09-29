@@ -366,6 +366,9 @@ ActivitySchema.statics.findActivitiesByFilters = function (data, callback) {
   if (data.name && typeof data.name == 'string')
     filters.name = data.name.trim();
 
+  if (data.season && isSeasonValid(data.season))
+    filters.season = data.season.toString().trim();
+
   Activity
     .find(filters)
     .skip(skip)
