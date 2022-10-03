@@ -22,15 +22,15 @@ block main
               .general-select-input-each-option(id='select-input-' + key)= gender_names[key]
         .general-form-input-title Alt Branş
         .general-select-input-wrapper
-          input.general-select-input-value.display-none#subbranch-input(type='text')
-          input.general-select-input-search(type='text' placeholder='Listeden Seçin')
+          input.general-select-input-value.display-none(type='text')
+          input.general-select-input-search#subbranch-input(type='text' placeholder='Listeden Seçin')
           .general-select-input-options-wrapper
             each subbranch in activity.branch.subbranches
               .general-select-input-each-option(id='select-input-' + subbranch)= subbranch
         .general-form-input-title Kategori
         .general-select-input-wrapper
-          input.general-select-input-value.display-none#category-input(type='text')
-          input.general-select-input-search(type='text' placeholder='Listeden Seçin')
+          input.general-select-input-value.display-none(type='text')
+          input.general-select-input-search#category-input(type='text' placeholder='Listeden Seçin')
           .general-select-input-options-wrapper
             each category in activity.branch.categories
               .general-select-input-each-option(id='select-input-' + category)= category
