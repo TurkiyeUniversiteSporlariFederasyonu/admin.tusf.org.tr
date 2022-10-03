@@ -1,12 +1,12 @@
 const json2csv = require('json-2-csv');
 
-const Medal = require('../../../models/medal/Medal');
+const Result = require('../../../models/result/Result');
 
 module.exports = (req, res) => {
   req.query.season = '2021 - 2022';
   req.query.by = 'medal';
 
-  Medal.createAndGetMedalOrderBy(req.query, (err, order) => {
+  Result.createAndGetMedalOrderBy(req.query, (err, order) => {
     if (err)
       return res.redirect('/error?message=' + err);
 
